@@ -1,60 +1,90 @@
 <template>
     <nav id="nav-box">
         <ul class="nav-list">
-            <li class="nav-item nav-main-item">
-                <a href="javascript:;" class="nav-inner nav-main-inner" @click="navClick($event, 1)" :class="{'act': index === 1}">
+            <li class="nav-item nav-main-item" :class="{'act': index === 1}">
+                <a href="javascript:;" class="nav-inner nav-main-inner" @click="navSlide">
                     <i class="nav-icon fa fa-book"></i>
                     <span class="nav-text">文章管理</span>
                     <i class="nav-dir-icon fa fa-angle-down"></i>
                 </a>
                 <ul class="sub-nav">
-                    <li class="nav-item nav-sub-item">
+                    <router-link
+                        class="nav-item nav-sub-item"
+                        to="/articleList"
+                        tag="li"
+                        @click.native="navClick($event, 1)"
+                        active-class="act">
                         <a href="javascript:;" class="nav-inner nav-sub-inner">
                             <i class="fa fa-angle-double-right"></i>
                             <span class="nav-text">文章列表</span>
                         </a>
-                    </li>
-                    <li class="nav-item nav-sub-item">
+                    </router-link>
+                    <router-link
+                        class="nav-item nav-sub-item"
+                        to="/articleAdd"
+                        tag="li"
+                        @click.native="navClick($event, 1)"
+                        active-class="act">
                         <a href="javascript:;" class="nav-inner nav-sub-inner">
                             <i class="fa fa-angle-double-right"></i>
                             <span class="nav-text">文章添加</span>
                         </a>
-                    </li>
+                    </router-link>
                 </ul>
             </li>
-            <li class="nav-item nav-main-item">
-                <a href="javascript:;" class="nav-inner nav-main-inner" @click="navClick($event, 2)" :class="{'act': index === 2}">
+            <li class="nav-item nav-main-item" :class="{'act': index === 2}">
+                <a href="javascript:;" class="nav-inner nav-main-inner" @click="navSlide">
                     <i class="nav-icon fa fa-cubes"></i>
                     <span class="nav-text">分类管理</span>
                     <i class="nav-dir-icon fa fa-angle-down"></i>
                 </a>
                 <ul class="sub-nav">
-                    <li class="nav-item nav-sub-item">
+                    <router-link
+                        class="nav-item nav-sub-item"
+                        to="/classificationList"
+                        tag="li"
+                        @click.native="navClick($event, 2)"
+                        active-class="act">
                         <a href="javascript:;" class="nav-inner nav-sub-inner">
                             <i class="fa fa-angle-double-right"></i>
                             <span class="nav-text">分类列表</span>
                         </a>
-                    </li>
-                    <li class="nav-item nav-sub-item">
+                    </router-link>
+                    <router-link
+                        class="nav-item nav-sub-item"
+                        to="/classificationAdd"
+                        tag="li"
+                        @click.native="navClick($event, 2)"
+                        active-class="act">
                         <a href="javascript:;" class="nav-inner nav-sub-inner">
                             <i class="fa fa-angle-double-right"></i>
                             <span class="nav-text">分类添加</span>
                         </a>
-                    </li>
+                    </router-link>
                 </ul>
             </li>
-            <li class="nav-item nav-main-item">
-                <a href="javascript:;" class="nav-inner nav-main-inner" @click="navClick($event, 3)" :class="{'act': index === 3}">
+            <router-link
+                class="nav-item nav-main-item"
+                to="/userList"
+                tag="li"
+                @click.native="navClick($event, 3)"
+                :class="{'act': index === 3}">
+                <a href="javascript:;" class="nav-inner nav-main-inner">
                     <i class="fa nav-icon fa-user-circle"></i>
-                    <span class="nav-text">用户管理</span>
+                    <span class="nav-text">用户列表</span>
                 </a>
-            </li>
-            <li class="nav-item nav-main-item">
-                <a href="javascript:;" class="nav-inner nav-main-inner" @click="navClick($event, 4)" :class="{'act': index === 4}">
+            </router-link>
+            <router-link
+                class="nav-item nav-main-item"
+                to="/commentList"
+                tag="li"
+                @click.native="navClick($event, 4)"
+                :class="{'act': index === 4}">
+                <a href="javascript:;" class="nav-inner nav-main-inner">
                     <i class="nav-icon fa fa-comments"></i>
                     <span class="nav-text">评论列表</span>
                 </a>
-            </li>
+            </router-link>
         </ul>
     </nav>
 </template>
@@ -67,17 +97,28 @@
             }
         },
         methods: {
-            navClick(e, index) {
+            navSlide(e) {
                 const target = cdj.parent(e.target, 'nav-main-item');
                 const subNav = target.getElementsByClassName('sub-nav')[0];
-                if( this.index === index ) this.index = -1;
-                else this.index = index;
-                if( subNav ) cdj.slideToggle(subNav, 100);
+                const dirIcon = target.getElementsByClassName('nav-dir-icon')[0];
+                if( subNav ) {
+                    cdj.slideToggle(subNav, 100);
+                    cdj.toggleClass(dirIcon, 'rotate');
+                }
+            },
+            navClick(e, index) {
+                e.stopPropagation();
+                this.index = index;
             }
         },
         mounted() {
-            const subNav = document.getElementsByClassName('nav-main-item')[this.index - 1].getElementsByClassName('sub-nav')[0];
-            cdj.slideDown(subNav, 100);
+            const target = document.getElementsByClassName('nav-main-item')[this.index - 1];
+            const subNav = target.getElementsByClassName('sub-nav')[0];
+            const dirIcon = target.getElementsByClassName('nav-dir-icon')[0];
+            if( subNav ) {
+                cdj.slideToggle(subNav, 100);
+                cdj.toggleClass(dirIcon, 'rotate');
+            }
         }
     }
 </script>
@@ -90,6 +131,7 @@
         box-sizing: border-box;
         color: @color;
         font-size: 13px;
+        transition: background-color .2s;
     }
     .nav-inner {
         display: inline-block;
@@ -98,12 +140,10 @@
         width: 100%;
         height: 100%;
         padding: 15px;
-        border-left: 0 solid @lineColor;
-        transition: .2s;
     }
-    .nav-main-inner:hover, .nav-main-inner.act {
+    .nav-main-item:hover, .nav-main-item.act {
         background-color: @primary;
-        color: #fff;
+        color: @white;
     }
     .nav-main-inner span {
         font-weight: normal;
@@ -117,6 +157,10 @@
         position: absolute;
         right: 16px;
         top: 18px;
+        transition: .15s;
+    }
+    .nav-dir-icon.rotate {
+        transform: rotate(180deg);
     }
     .nav-text {
         padding-left: 10px;
@@ -127,10 +171,10 @@
         padding-left: 8px;
     }
     .nav-sub-item {
-        transition: transform .4s;
+        transition: padding .4s;
     }
-    .nav-sub-item:hover {
+    .nav-sub-item:hover, .nav-sub-item.act {
         color: @primary;
-        transform: translateX(5px);
+        padding-left: 5px;
     }
 </style>

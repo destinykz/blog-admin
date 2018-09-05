@@ -1,5 +1,5 @@
 <template>
-    <div>articleList</div>
+    <div>文章列表</div>
 </template>
 
 <script>

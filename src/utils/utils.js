@@ -1,5 +1,4 @@
 window.cdj = {};
-
 // 获取元素父级
 cdj.parent = function(el, className) {
     if( cdj.hasClass(el, className) ) return el;
@@ -9,10 +8,6 @@ cdj.parent = function(el, className) {
     }
     return parent;
 };
-// 判断元素是否有该class
-cdj.hasClass = function(el, className) {
-    return el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
-}
 // 获取元素样式
 cdj.getStyle = function(el, style) {
     if( el.currentStyle ) return el.currentStyle[style];
@@ -177,10 +172,12 @@ cdj.animate = function(el, obj, time, fn) {
         return ( new Date() ).getTime();
     }
 }
+// 展开或折叠
 cdj.slideToggle = function(el, time) {
     if( el.state === 'show' ) cdj.slideUp(el, time);
     else cdj.slideDown(el, time);
 }
+// 展开
 cdj.slideDown = function(el, time) {
     el.state = 'show';
     el.style.display = 'block';
@@ -195,7 +192,8 @@ cdj.slideDown = function(el, time) {
         el.style.overflow = 'inherit';
     });
 
-};
+}
+// 折叠
 cdj.slideUp = function(el, time) {
     el.state = '';
     el.style.overflow = 'hidden';
@@ -207,3 +205,21 @@ cdj.slideUp = function(el, time) {
     });
 
 };
+// 是否包含类
+cdj.hasClass = function(el, cls) {
+    if( el.className ) return el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    else return false;
+}
+// 增加类
+cdj.addClass = function(el, cls) {
+    if( !cdj.hasClass(cls) ) el.className += ' ' + cls;
+}
+// 删除类
+cdj.removeClass = function(el, cls) {
+    el.className = el.className.replace(new RegExp('(\\s|^)' + cls + '(\\s|$)'), ' ');
+}
+// 添加或删除
+cdj.toggleClass = function(el, cls) {
+    if( cdj.hasClass(el, cls) ) cdj.removeClass(el, cls);
+    else cdj.addClass(el, cls);
+}
