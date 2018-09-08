@@ -98,12 +98,12 @@
         },
         methods: {
             navSlide(e) {
-                const target = cdj.parent(e.target, 'nav-main-item');
+                const target = c.parent(e.target, 'nav-main-item');
                 const subNav = target.getElementsByClassName('sub-nav')[0];
                 const dirIcon = target.getElementsByClassName('nav-dir-icon')[0];
                 if( subNav ) {
-                    cdj.slideToggle(subNav, 100);
-                    cdj.toggleClass(dirIcon, 'rotate');
+                    c.slideToggle(subNav, 100);
+                    c.toggleClass(dirIcon, 'rotate');
                 }
             },
             navClick(e, index) {
@@ -116,8 +116,8 @@
             const subNav = target.getElementsByClassName('sub-nav')[0];
             const dirIcon = target.getElementsByClassName('nav-dir-icon')[0];
             if( subNav ) {
-                cdj.slideToggle(subNav, 100);
-                cdj.toggleClass(dirIcon, 'rotate');
+                c.slideToggle(subNav, 100);
+                c.toggleClass(dirIcon, 'rotate');
             }
         }
     }
@@ -142,7 +142,7 @@
         padding: 15px;
     }
     .nav-main-item:hover, .nav-main-item.act {
-        background-color: @primary;
+        background-color: @blue;
         color: @white;
     }
     .nav-main-inner span {
@@ -174,7 +174,7 @@
         transition: padding .4s;
     }
     .nav-sub-item:hover, .nav-sub-item.act {
-        color: @primary;
+        color: @blue;
         padding-left: 5px;
     }
 </style>

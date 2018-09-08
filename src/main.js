@@ -3,9 +3,7 @@ import App from './App'
 import router from './router'
 
 // 重置函数
-import '@/assets/css/reset.less'
-// 主函数
-import '@/assets/css/style.less'
+import '@/assets/css/public.less'
 // 工具函数
 import '@/utils/utils'
 

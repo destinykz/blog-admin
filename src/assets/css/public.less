@@ -1,15 +1,192 @@
-@asideW: 210px;
-@bg: #f9fafe;
-@lineColor: #d1f1fd;
-@primary: #65b2ff;
-@color: #727272;
-@white: #fff;
-
-:root {
-    --azure: #FBFDFD;
-    --pattens-blue: #D1F1FD;
-    --pattens-blue: #C9DEEF;
-    --light-blue: #A8DBEE;
-    --link-water: #CDD1D4;
-    --cornflower-blue: #669EE0;
+body, ul, h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+em, i {
+    font-style: normal;
+}
+h1, h2, h3 {
+    font-weight: normal;
+}
+img {
+    border: none;
+    vertical-align: top;
+}
+ul {
+    list-style: none;
+}
+.clear {
+    zoom: 1;
+}
+.clear:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+body {
+    font-family: Arial, 'Microsoft YaHei';
+}
+input, button, textarea, select {
+    border: none;
+    background: none;
+    outline: none;
+}
+input[type="file"] {
+    display: none;
+}
+.cdl-text {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid @darkBg;
+    color: @color;
+    font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+}
+.cdl-area {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid @darkBg;
+    color: @color;
+    font-size: 14px;
+    min-height: 80px;
+    line-height: 28px;
+    padding: 0 15px;
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+}
+.cdl-text:focus, .cdl-area:focus {
+    border: 1px solid @blue;
+}
+/* 提示信息 */
+.cdl-msg {
+	position: fixed;
+	display: flex;
+	align-items: center;
+	min-width: 380px;
+	box-sizing: border-box;
+	border-radius: 4px;
+	border: 1px solid #ebeef5;
+	left: 50%;
+	top: 20px;
+	margin-left: -190px;
+	transition: opacity .3s, transform .4s;
+	color: #fff;
+	overflow: hidden;
+	padding: 11px 15px 11px 20px;
+	z-index: 50;
+	
+	opacity: 0;
+	transform: translateY(-100%);
+}
+.cdl-msg.show {
+	opacity: 1;
+	transform: translateY(0);
+}
+.cdl-msg-icon {
+	font-weight: 400;
+	display: inline-block;
+	margin-right: 15px;
+}
+.cdl-msg-content {
+	font-size: 14px;
+}
+/* 成功 */
+.cdl-msg.success {
+	background-color: lighten(@green, 5%);
+	border-color: lighten(@green, 3%);
+}
+/* 警告 */
+.cdl-msg.warning {
+    background-color: lighten(@yellow, 5%);
+    border-color: lighten(@yellow, 3%);
+}
+/* 消息 */
+.cdl-msg.info {
+	background-color: lighten(@color, 5%);
+    border-color: lighten(@color, 3%);
+}
+/* 错误 */
+.cdl-msg.error {
+	background-color: lighten(@red, 5%);
+	border-color: lighten(@red, 3%);
+}
+// 按钮
+.cdl-button {
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid @darkBg;
+    color: @white;
+    text-align: center;
+    transition: .1s;
+    font-weight: 500;
+    user-select: none;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 10px 20px;
+}
+// 蓝按钮
+.cdl-button.blue {
+    border: none;
+    background-color: @blue;
+}
+.cdl-button.blue:hover {
+    background-color: lighten(@blue, 3%);
+}
+.cdl-button.blue:active {
+    background-color: darken(@blue, 3%);
+}
+// 黄按钮
+.cdl-button.yellow {
+    background-color: @yellow;
+}
+.cdl-button.yellow:hover {
+    background-color: lighten(@yellow, 3%);
+}
+.cdl-button.yellow:active {
+    background-color: darken(@yellow, 3%);
+}
+// 绿按钮
+.cdl-button.green {
+    background-color: @green;
+}
+.cdl-button.green:hover {
+    background-color: lighten(@green, 3%);
+}
+.cdl-button.green:active {
+    background-color: darken(@green, 3%);
+}
+// 红按钮
+.cdl-button.red {
+    background-color: @red;
+}
+.cdl-button.red:hover {
+    background-color: lighten(@red, 3%);
+}
+.cdl-button.red:active {
+    background-color: darken(@red, 3%);
+}
+// 关闭按钮
+.cdl-close {
+    cursor: pointer;
+    transition: transform .3s;
+}
+.cdl-close:hover {
+    transform: rotate(360deg);
 }

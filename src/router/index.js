@@ -18,14 +18,15 @@ Vue.use(Router)
 export default new Router({
     routes: [
         {
-            path: '/',
-            name: 'articleAdd',
-            component: articleAdd
-        },
-        {
-            path: '/articleList',
+            path: '',
+            alias: '/articleList',
             name: 'articleList',
             component: articleList
+        },
+        {
+            path: '/articleAdd',
+            name: 'articleAdd',
+            component: articleAdd
         },
         {
             path: '/classificationList',
@@ -36,6 +37,16 @@ export default new Router({
             path: '/classificationAdd',
             name: 'classificationAdd',
             component: classificationAdd
+        },
+        {
+            path: '/classificationAdd',
+            name: 'classificationAdd',
+            component: classificationAdd
+        },
+        {
+            path: '/userList',
+            name: 'userList',
+            component: userList
         },
         {
             path: '/commentList',
