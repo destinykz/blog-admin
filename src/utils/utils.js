@@ -1,6 +1,6 @@
-import axios from 'axios';
 window.c = {};
-c.axios = axios;
+c.width = document.documentElement.clientWidth || document.body.clientWidth;
+c.height = document.documentElement.clientHeight || document.body.clientHeight;
 // 获取元素父级
 c.parent = function(el, className) {
     if( c.hasClass(el, className) ) return el;
@@ -145,7 +145,7 @@ c.Tween = {
         return Tween['bounceOut'](t*2-d, 0, c, d) * 0.5 + c*0.5 + b;
     }
 }
-// 元素运动函数
+// 运动函数
 c.animate = function(el, obj, time, fn) {
     const initVal = {};
     for (const style in obj) {
@@ -222,6 +222,32 @@ c.toggleClass = function(el, cls) {
     if( c.hasClass(el, cls) ) c.removeClass(el, cls);
     else c.addClass(el, cls);
 }
+// loading...
+;(function() {
+    const Loading = function(text) {
+        const loading = document.createElement('div');
+        this.loading = loading;
+        loading.className = 'cdl-loading';
+        loading.style.height = (document.documentElement.clientHeight || document.body.clientHeight) + 'px';
+        const loadingCnt = document.createElement('div');
+        loadingCnt.className = 'cdl-loading-cnt';
+        // loadingIcon
+        const loadingIcon = document.createElement('i');
+        loadingIcon.className = 'loading-icon fa fa-cog';
+        // loadingText
+        const loadingText = document.createElement('strong');
+        loadingText.className = 'loading-text';
+        loadingText.innerText = text;
+        loadingCnt.appendChild(loadingIcon);
+        loadingCnt.appendChild(loadingText);
+        loading.appendChild(loadingCnt);
+        document.body.appendChild(loading);
+    }
+    Loading.prototype.close = function() {
+        this.loading.parentNode.removeChild(this.loading);
+    };
+    c.Loading = Loading;
+})();
 // 消息提示
 ;(function() {
     function msg(obj) {
@@ -282,7 +308,7 @@ c.toggleClass = function(el, cls) {
         new msg(obj);
     };
 })();
-// 压缩压缩
+// 图片压缩
 ;(function() {
     c.compress = function(file, w) {
         return new Promise((resolve, reject) => {
@@ -313,4 +339,80 @@ c.toggleClass = function(el, cls) {
             }
         });
     };
+})();
+// 登录背景canvas
+(function() {
+    const Heart = function(box) {
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'fixed';
+        canvas.style.left = '0';
+        canvas.style.top = '0';
+        canvas.width = c.width;
+        canvas.height = c.height;
+        box.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+    
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.len = 10;
+        this.heartArr = [];
+
+        this.init();
+        requestAnimationFrame(() => {
+            this.startAni();
+        })
+        
+    };
+    Heart.prototype.init = function () {
+        for (let i = 0; i < this.len; i++) {
+            this.heartArr.push({
+                x: Math.random() * c.width,
+                y: Math.random() * c.height,
+                speedY: Math.random() * 0.5,
+                r: Math.random(),
+                opacity: Math.random(),
+                opacitySpeed: Math.random() * 0.02
+            })
+        }
+    }
+    Heart.prototype.getX = function(r, t) {
+        return r * (16 * Math.pow(Math.sin(t), 3));
+    }
+    Heart.prototype.getY = function(r, t) {
+        return -r * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+    }
+    Heart.prototype.startAni = function () {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.heartArr.map(heartItem => {
+            heartItem.y -= heartItem.speedY;
+            heartItem.opacity -= heartItem.opacitySpeed;
+            heartItem.r += 0.01;
+            if( heartItem.opacity <= 0 ) {
+                heartItem.opacity = 1;
+                heartItem.x = Math.random() * c.width;
+                heartItem.y = Math.random() * c.height;
+                heartItem.r = Math.random() * 1 + 1;
+            }
+            this.draw(heartItem.x, heartItem.y, heartItem.r, heartItem.opacity, heartItem.vertices);
+        });
+        setTimeout(() => {
+            requestAnimationFrame(() => {
+                this.startAni();
+            })
+        }, 20);
+    }
+    Heart.prototype.draw = function (x, y, r, opacity) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.getX(r, 0) + x, this.getY(r, 0) + y); //移动绘图游标至原点
+        let radian = 0;
+
+        while (radian <= (Math.PI * 2)) {
+            radian += Math.PI / 180;
+            this.ctx.lineTo(this.getX(r, radian) + x, this.getY(r, radian) + y);
+        }
+        this.ctx.fillStyle = '#65b2ff';
+        this.ctx.globalAlpha= opacity;
+        this.ctx.fill();
+    };
+    c.Heart = Heart;
 })();

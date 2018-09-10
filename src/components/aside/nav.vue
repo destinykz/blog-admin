@@ -10,24 +10,24 @@
                 <ul class="sub-nav">
                     <router-link
                         class="nav-item nav-sub-item"
-                        to="/articleList"
-                        tag="li"
-                        @click.native="navClick($event, 1)"
-                        active-class="act">
-                        <a href="javascript:;" class="nav-inner nav-sub-inner">
-                            <i class="fa fa-angle-double-right"></i>
-                            <span class="nav-text">文章列表</span>
-                        </a>
-                    </router-link>
-                    <router-link
-                        class="nav-item nav-sub-item"
-                        to="/articleAdd"
+                        to="/admin/articleAdd"
                         tag="li"
                         @click.native="navClick($event, 1)"
                         active-class="act">
                         <a href="javascript:;" class="nav-inner nav-sub-inner">
                             <i class="fa fa-angle-double-right"></i>
                             <span class="nav-text">文章添加</span>
+                        </a>
+                    </router-link>
+                    <router-link
+                        class="nav-item nav-sub-item"
+                        to="/admin/articleList"
+                        tag="li"
+                        @click.native="navClick($event, 1)"
+                        active-class="act">
+                        <a href="javascript:;" class="nav-inner nav-sub-inner">
+                            <i class="fa fa-angle-double-right"></i>
+                            <span class="nav-text">文章列表</span>
                         </a>
                     </router-link>
                 </ul>
@@ -41,7 +41,7 @@
                 <ul class="sub-nav">
                     <router-link
                         class="nav-item nav-sub-item"
-                        to="/classificationList"
+                        to="/admin/classificationList"
                         tag="li"
                         @click.native="navClick($event, 2)"
                         active-class="act">
@@ -52,7 +52,7 @@
                     </router-link>
                     <router-link
                         class="nav-item nav-sub-item"
-                        to="/classificationAdd"
+                        to="/admin/classificationAdd"
                         tag="li"
                         @click.native="navClick($event, 2)"
                         active-class="act">
@@ -65,7 +65,7 @@
             </li>
             <router-link
                 class="nav-item nav-main-item"
-                to="/userList"
+                to="/admin/userList"
                 tag="li"
                 @click.native="navClick($event, 3)"
                 :class="{'act': index === 3}">
@@ -76,7 +76,7 @@
             </router-link>
             <router-link
                 class="nav-item nav-main-item"
-                to="/commentList"
+                to="/admin/commentList"
                 tag="li"
                 @click.native="navClick($event, 4)"
                 :class="{'act': index === 4}">
@@ -168,13 +168,14 @@
     .sub-nav {
         display: none;
         background-color: @bg;
-        padding-left: 8px;
     }
     .nav-sub-item {
         transition: padding .4s;
+        padding-left: 10px;
     }
     .nav-sub-item:hover, .nav-sub-item.act {
         color: @blue;
-        padding-left: 5px;
+        background-color: @white;
+        padding-left: 15px;
     }
 </style>

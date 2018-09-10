@@ -17,9 +17,9 @@
                 <span class="cdl-form-title">文章图片</span>
                 <div class="cdl-form-cnt">
                     <label for="uploadImg" class="cdl-button blue"><i class="fa fa-upload"></i>&nbsp;&nbsp;上传主图</label>
-                    <input type="file" id="uploadImg" @change="uploadImg" :value="src" >
+                    <input type="file" id="uploadImg" @change="uploadImg" :value="uploadImgVal">
                 </div>
-                <div id="imgview" v-if="uploadImgShow">
+                <div id="imgview" v-show="articleData.base64">
                     <i class="uploadImgClose cdl-close fa fa-close" @click="closeUploadImg"></i>
                     <img :src="articleData.base64" alt="预览图片">
                 </div>
@@ -28,11 +28,11 @@
                 <span class="cdl-form-title">文章标签</span>
                 <div class="cdl-form-cnt">
                     <select class="cdl-text" v-model="articleData.tag">
-                        <option value="HTML">HTML</option>
-                        <option value="CSS">CSS</option>
-                        <option value="JavaScript">JavaScript</option>
-                        <option value="Vue">Vue</option>
-                        <option value="Webpack">Webpack</option>
+                        <option value="1">HTML</option>
+                        <option value="2">CSS</option>
+                        <option value="3">JavaScript</option>
+                        <option value="4">Vue</option>
+                        <option value="5">Webpack</option>
                     </select>
                 </div>
             </div>
@@ -50,20 +50,19 @@
 
 <script>
     import MarkDown from 'vue-meditor'
-    import request from '../../../../../request'
+    import {addArticle} from '@/server/server'
     export default {
         components: {
             MarkDown
         },
         data() {
             return {
-                uploadImgShow: false,
-                src: '',
+                uploadImgVal: '', // input[type="file"] 的值
                 articleData: {
                     title: '', // 标题
                     preface: '', // 前言
                     base64: '', // 图片
-                    tag: '', // 标签
+                    tag: 0, // 标签
                     content: '' // 内容
                 }
             }
@@ -89,16 +88,15 @@
                 } else {
                     this.closeUploadImg();
                     c.msg({
-                        type: 'danger',
-                        content: '请上传图片！'
+                        type: 'error',
+                        content: '仅支持图片格式！'
                     })
                 }
             },
             // 关闭图片
             closeUploadImg() {
-                this.src = '';
+                this.uploadImgVal = '';
                 this.articleData.base64 = '';
-                this.uploadImgShow = false;
             },
             // 保存markdown内容
             saveMarkDown(mdCnt) {
@@ -106,45 +104,52 @@
             },
             // 文章发布
             send() {
-                c.axios.post(`/blog${request.addArticle}`, this.articleData)
-                .then(data => {
+                if( this.articleData.title.trim() === '' ) {
                     c.msg({
-                        type: 'success',
-                        content: data.data.msg
-                    })
+                        type: 'error',
+                        content: '请填写文章标题！'
+                    });
+                    return;
+                }
+                if( this.articleData.preface.trim() === '' ) {
+                    c.msg({
+                        type: 'error',
+                        content: '请填写文章前言！'
+                    });
+                    return;
+                }
+                if( !this.articleData.tag ) {
+                    c.msg({
+                        type: 'error',
+                        content: '请选择文章标签！'
+                    });
+                    return;
+                }
+                if( this.articleData.content.trim() === '' ) {
+                    c.msg({
+                        type: 'error',
+                        content: '请填写文章内容！'
+                    });
+                    return;
+                }
+                // 文章发布
+                this.articleData.base64 = this.articleData.base64.replace(/data:image\/png\;base64\,/, '');
+                addArticle(this.articleData)
+                .then(data => {
+                    console.log(data);
                 })
+                .catch(err => {
+                    console.log(err);
+                });
             },
             // 文章保存
             save() {
-
             }
         }
     }
 </script>
 
 <style lang="less">
-    @formTitleW: 70px;
-    .cdl-form-item {
-        position: relative;
-        min-height: 40px;
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid @darkBg;
-    }
-    .cdl-form-title {
-        position: absolute;
-        height: 100%;
-        line-height: 40px;
-        left: 0;
-        top: 0;
-        width: @formTitleW;
-        box-sizing: border-box;
-        font-size: 14px;
-        color: @color;
-    }
-    .cdl-form-cnt {
-        padding-left: @formTitleW;
-    }
     #imgview {
         display: inline-block;
         position: relative;
@@ -156,9 +161,9 @@
     }
     #imgview .uploadImgClose {
         position: absolute;
-        font-size: 12px;
-        right: -10px;
-        top: -10px;
+        font-size: 16px;
+        right: -16px;
+        top: -16px;
         color: @black;
     }
     .markdown {
@@ -169,5 +174,8 @@
         box-shadow: none !important;
         border-bottom: none !important;
         color: @color !important;
+    }
+    .markdown .markdown-content .markdown-preview {
+        background-color: @bg !important;
     }
 </style>
