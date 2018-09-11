@@ -31,9 +31,8 @@
         height: 100%;
     }
     #header {
-        position: relative;
         height: 50px;
-        background-color: @bg;
+        background-color: @blue;
     }
     #content {
         height: calc(100% - 50px);
@@ -43,7 +42,7 @@
         position: relative;
         width: @asideW;
         height: 100%;
-        background-color: @bg;
+        background-color: @white;
     }
     #aside:after {
         content: '';
@@ -52,7 +51,7 @@
         height: 100%;
         right: 0;
         top: 0;
-        background-color: darken(@bg, 2%);;
+        background-color: darken(@white, 2%);
         z-index: 50;
     }
     #main {
@@ -60,31 +59,18 @@
         float: right;
         width: calc(100% - @asideW);
         height: 100%;
-        background-color: @white;
+        background-color: @bg;
         box-sizing: border-box;
         padding: 30px;
+        padding-bottom: 0;
         overflow-x: hidden;
         overflow-y: auto;
-    }
-    #username {
-        position: absolute;
-        height: 100%;
-        right: 0;
-        top: 0;
-        box-sizing: border-box;
-        padding: 14px 20px;
-        color: @color;
-        font-size: 18px;
-        transition: .15s;
-    }
-    #username:hover {
-        background-color: @bg;
     }
     #logo {
         float: left;
         width: @asideW;
         height: 100%;
-        background-color: @white;
+        background-color: @bg;
         color: @blue;
         text-align: center;
     }
@@ -101,15 +87,7 @@
         position: relative;
         width: calc(100% - @asideW);
         height: 100%;
-    }
-    #header-cnt:after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 1px;
-        left: 0;
-        bottom: 0;
-        background-color: darken(@bg, 2%);
+        color: @white;
     }
     .slide-enter-active, .slide-leave-active {
         transition: .3s;

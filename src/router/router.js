@@ -19,6 +19,8 @@ import commentList from '@/components/main/comment/comment-list'
 
 Vue.use(Router)
 
+import {checkLogin} from '@/server/server'
+
 const router = new Router({
     routes: [
         {
@@ -69,14 +71,20 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    if( to.fullPath.match(/admin/) ) {
-        if( window.localStorage.getItem('token') ) next();
-        else next({
-            path: '/login',
-            query: { redirect: to.name }
+    if( to.name === 'login' || from.name === 'login' ) next(); 
+    else {
+        // 验证登录
+        checkLogin()
+        .then(({data}) => {
+            if(data.code === 0) next();
+            else {
+                next({
+                    path: '/login',
+                    query: { redirect: to.name }
+                });
+            }
         });
     }
-    else next();
 })
 
 export default router;

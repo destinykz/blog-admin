@@ -9,19 +9,9 @@ const http = axios.create({
         }
     },
     transformResponse: [data => {
-        if( !data ) return;
         if( data.token ) {
+            window.localStorage.setItem('username', data.username);
             window.localStorage.setItem('token', data.token);
-        }
-        if( data.code === 0 ) {
-            c.msg({
-                content: data.msg
-            })
-        }else if( data.code === 1 ) {
-            c.msg({
-                type: 'error',
-                content: data.msg
-            })
         }
         return data;
     }]
@@ -36,15 +26,19 @@ http.interceptors.response.use(
             switch (error.response.status) {
                 case 401:
                     window.localStorage.removeItem('token');
+                    window.localStorage.removeItem('username');
                     router.push({
                         path: '/login',
                         query: { redirect: router.currentrouter.name }
                     })
             }
         }
-        return Promise.reject(error.response)
     }
-)
+);
+// 检查是否登陆
+export const checkLogin = () => {
+    return http.post('admin/checkLogin');
+}
 // 登录
 export const login = (username, password) => {
     return http.post('admin/login', {
@@ -55,4 +49,8 @@ export const login = (username, password) => {
 // 添加文章
 export const addArticle = articleData => {
     return http.post('admin/articleAdd', {articleData});
+}
+// 查询列表值
+export const tagList = () => {
+    return http.post('admin/getTagList');
 }

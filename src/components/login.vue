@@ -70,17 +70,30 @@
                     });
                     return;
                 }
+                // loading
+                const loading = new c.Loading('正在登录，请耐心等待！')
                 // 调用登录方法
                 login(this.username, this.password)
                 .then(({data}) => {
                     if( data.code === 0 ) {
+                        c.msg({
+                            content: data.msg
+                        });
                         this.$router.push({ name: this.$route.query.redirect || 'articleAdd'});
+                    } else {
+                        c.msg({
+                            type: 'error',
+                            content: data.msg
+                        });
                     }
                 }).catch(err => {
                     c.msg({
                         type: 'error',
                         content: '服务器发生异常，登录失败！'
                     });
+                })
+                .finally(() => {
+                    loading.close();
                 });
             }
         }
