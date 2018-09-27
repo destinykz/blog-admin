@@ -1,3 +1,4 @@
+import Vue from 'vue';
 window.c = {};
 c.width = document.documentElement.clientWidth || document.body.clientWidth;
 c.height = document.documentElement.clientHeight || document.body.clientHeight;
@@ -356,6 +357,8 @@ c.toggleClass = function(el, cls) {
         this.ctx = ctx;
         this.len = 10;
         this.heartArr = [];
+        var oStyle = box.currentStyle ? box.currentStyle : window.getComputedStyle(box, null);
+        this.color = oStyle.color;
 
         this.init();
         requestAnimationFrame(() => {
@@ -410,7 +413,7 @@ c.toggleClass = function(el, cls) {
             radian += Math.PI / 180;
             this.ctx.lineTo(this.getX(r, radian) + x, this.getY(r, radian) + y);
         }
-        this.ctx.fillStyle = '#65b2ff';
+        this.ctx.fillStyle = this.color;
         this.ctx.globalAlpha= opacity;
         this.ctx.fill();
     };

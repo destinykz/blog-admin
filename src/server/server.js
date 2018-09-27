@@ -1,47 +1,59 @@
 import axios from 'axios'
 import router from "@/router/router";
 const http = axios.create({
-    baseURL: 'http://localhost:8001',
+    baseURL: 'http://localhost:1111',
     responseType: 'json',
-    headers: {
-        common: {
-            Authorization: window.localStorage.getItem('token') || ''
-        }
-    },
     transformResponse: [data => {
         if( data.token ) {
+            window.localStorage.setItem('uid', data.uid);
             window.localStorage.setItem('username', data.username);
             window.localStorage.setItem('token', data.token);
         }
         return data;
     }]
 });
-
+// 请求前
+http.interceptors.request.use(function (config) {
+    config.headers.token = window.localStorage.getItem('token') || '';
+    config.headers.uid = window.localStorage.getItem('uid') || '';
+    return config;
+}, function (error) {
+    return Promise.reject(error);
+});
+// 请求后
 http.interceptors.response.use(
     response => {
         return response
     },
-    error => {
-        if (error.response) {
-            switch (error.response.status) {
-                case 401:
-                    window.localStorage.removeItem('token');
-                    window.localStorage.removeItem('username');
-                    router.push({
-                        path: '/login',
-                        query: { redirect: router.currentrouter.name }
-                    })
-            }
+    err => {
+        if( err.response.status === 401 ) {
+            window.localStorage.removeItem('token');
+            window.localStorage.removeItem('uid');
+            window.localStorage.removeItem('username');
+            c.msg({
+                type: 'error',
+                content: err.response.data.msg
+            });
+            router.push({
+                name: 'login',
+                query: { redirect: router.history.current.name }
+            });
+        } else {
+            c.msg({
+                type: 'error',
+                content: '服务器发生异常！'
+            });
         }
     }
 );
+
 // 检查是否登陆
 export const checkLogin = () => {
-    return http.post('admin/checkLogin');
+    return http.post('user/checkLogin');
 }
 // 登录
 export const login = (username, password) => {
-    return http.post('admin/login', {
+    return http.post('user/login', {
         username,
         password
     })

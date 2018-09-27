@@ -22,6 +22,7 @@ Vue.use(Router)
 import {checkLogin} from '@/server/server'
 
 const router = new Router({
+    mode: 'history',
     routes: [
         {
             path: '/login',
@@ -71,20 +72,23 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    if( to.name === 'login' || from.name === 'login' ) next(); 
-    else {
-        // 验证登录
-        checkLogin()
-        .then(({data}) => {
-            if(data.code === 0) next();
-            else {
-                next({
+    if( to.name !== 'login' ) {
+        try {
+            // 验证登录
+            checkLogin().then(({data}) => {
+                if(data.code === 0) next();
+                else next({
                     path: '/login',
                     query: { redirect: to.name }
                 });
-            }
-        });
-    }
+            });
+        } catch (err) {
+            next({
+                path: '/login',
+                query: { redirect: to.name }
+            });
+        }
+    } else next();
 })
 
 export default router;

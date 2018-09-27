@@ -1,19 +1,23 @@
 <template>
     <div id="article-add">
-        <form action="">
-            <div class="cdl-form-item">
+        <div class="cdl-form-item">
+            <div class="cdl-form-wrap">
                 <span class="cdl-form-title">文章标题</span>
                 <div class="cdl-form-cnt">
-                    <input type="text" class="cdl-text" placeholder="请输入文章标题" autofocus="true" v-model="articleData.title">
+                    <input type="text" class="cdl-text" autofocus maxlength="50" placeholder="请输入文章标题" v-model="articleData.title">
                 </div>
             </div>
-            <div class="cdl-form-item">
+        </div>
+        <div class="cdl-form-item">
+            <div class="cdl-form-wrap">
                 <span class="cdl-form-title">文章前言</span>
                 <div class="cdl-form-cnt">
-                    <textarea class="cdl-area" placeholder="请输入文章前言" v-model="articleData.preface"></textarea>
+                    <textarea class="cdl-area" placeholder="请输入文章前言"  maxlength="500" v-model="articleData.preface"></textarea>
                 </div>
             </div>
-            <div class="cdl-form-item">
+        </div>
+        <div class="cdl-form-item">
+            <div class="cdl-form-wrap">
                 <span class="cdl-form-title">文章图片</span>
                 <div class="cdl-form-cnt">
                     <label for="uploadImg" class="cdl-button blue"><i class="fa fa-upload"></i>&nbsp;&nbsp;上传主图</label>
@@ -24,7 +28,9 @@
                     <img :src="base64" alt="预览图片">
                 </div>
             </div>
-            <div class="cdl-form-item">
+        </div>
+        <div class="cdl-form-item">
+            <div class="cdl-form-wrap">
                 <span class="cdl-form-title">文章标签</span>
                 <div class="cdl-form-cnt">
                     <select class="cdl-text" v-model="articleData.tag_id">
@@ -32,18 +38,19 @@
                     </select>
                 </div>
             </div>
-            <div class="cdl-form-item">
-                <MarkDown @on-save="saveMarkDown" :autoSave="false"></MarkDown>
+        </div>
+        <div class="cdl-form-item">
+            <div class="cdl-form-wrap">
+                <MarkDown @on-save="saveMarkDown"></MarkDown>
             </div>
-            <div class="cdl-form-item">
+        </div>
+        <div class="cdl-form-item">
+            <div class="cdl-form-wrap">
                 <button type="button" class="cdl-button blue" @click="send">发布</button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <!-- <button type="button" class="cdl-button yellow" @click="save">保存至草稿</button> -->
             </div>
-        </form>
+        </div>
     </div>
 </template>
-
 <script>
     import MarkDown from 'vue-meditor'
     import {addArticle, tagList} from '@/server/server'
@@ -67,8 +74,8 @@
         },
         mounted() {
             tagList()
-            .then(data => {
-                this.tagList = data.data.tagList;
+            .then(({data}) => {
+                this.tagList = data.tagList;
             })
         },
         methods: {
@@ -149,25 +156,24 @@
                         content: data.msg
                     })
                 })
-                .catch(err => {
-                    c.msg({
-                        type: 'error',
-                        content: '服务器发生异常！'
-                    })
-                }).
-                finally(() => {
+                .finally(() => {
                     // 关闭loading
                     loading.close();
                 })
-            },
-            // 文章保存
-            save() {
             }
         }
     }
 </script>
 
 <style lang="less">
+    #article-add {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    .cdl-form-item {
+        position: relative;
+        margin-top: 40px;
+    }
     #imgview {
         display: inline-block;
         position: relative;
@@ -182,7 +188,7 @@
         font-size: 16px;
         right: -16px;
         top: -16px;
-        color: @black;
+        color: @color;
     }
     .markdown {
         background: none !important;
@@ -193,7 +199,53 @@
         border-bottom: none !important;
         color: @color !important;
     }
+    .markdown .markdown-content .markdown-editor .index {
+        background-color: #fafbfc !important;
+    }
+    .markdown .markdown-content .markdown-editor .index li {
+        background-color: @bg  !important;
+        color: @color !important;
+    }
+    .markdown .markdown-content .markdown-editor textarea {
+        background-color: @bg !important;
+        color: @color !important;
+    }
+    #imgview {
+        display: inline-block;
+        position: relative;
+        margin-top: 20px;
+    }
+    #imgview img {
+        display: block;
+        width: 200px;
+    }
+    #imgview .uploadImgClose {
+        position: absolute;
+        font-size: 16px;
+        right: -16px;
+        top: -16px;
+        color: @color;
+    }
+    .markdown {
+        background: none !important;
+    }
+    .markdown .markdown-toolbars {
+        height: 40px !important;
+        box-shadow: none !important;
+        border-bottom: none !important;
+        color: @color !important;
+    }
+    .markdown .markdown-content .markdown-editor .index {
+        background-color: lighten(@bg, 1%) !important;
+    }
+    .markdown .markdown-content .markdown-editor .index li {
+        background-color: @bg  !important;
+        color: @color !important;
+    }
     .markdown .markdown-content .markdown-preview {
         background-color: @bg !important;
+    }
+    .markdown-preview p {
+        color: @color !important;
     }
 </style>

@@ -6,21 +6,27 @@
                 <span>Login</span>
             </div>
             <form action="">
-                <div class="cdl-form-item">
-                    <span class="cdl-form-title"> <i class="fa fa-user"></i> 用户名</span>
-                    <div class="cdl-form-cnt">
-                        <input type="text" class="cdl-text" placeholder="Username" autofocus="true" v-model="username" @keyup.13="login" maxlength="80">
+                <div class="cdl-form-login">
+                    <div class="cdl-form-wrap">
+                        <span class="cdl-form-title"> <i class="fa fa-user"></i> 用户名</span>
+                        <div class="cdl-form-cnt">
+                            <input type="text" class="cdl-text" placeholder="Username" autofocus="true" v-model="username" @keyup.13="login" maxlength="80">
+                        </div>
                     </div>
                 </div>
-                <div class="cdl-form-item">
-                    <span class="cdl-form-title"> <i class="fa fa-lock"></i> 密码</span>
-                    <div class="cdl-form-cnt">
-                        <input type="password" class="cdl-text" placeholder="Password" v-model="password" @keyup.13="login" maxlength="100">
+                <div class="cdl-form-login">
+                    <div class="cdl-form-wrap">
+                        <span class="cdl-form-title"> <i class="fa fa-lock"></i> 密码</span>
+                        <div class="cdl-form-cnt">
+                            <input type="password" class="cdl-text" placeholder="Password" v-model="password" @keyup.13="login" maxlength="100">
+                        </div>
                     </div>
                 </div>
-                <div class="cdl-form-item">
-                    <div class="cdl-form-cnt">
-                        <button type="button" class="login-btn cdl-button blue" @click="login">登录</button>
+                <div class="cdl-form-login">
+                    <div class="cdl-form-wrap">
+                        <div class="cdl-form-cnt">
+                            <button type="button" class="login-btn cdl-button blue" @click="login">登录</button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -79,7 +85,7 @@
                         c.msg({
                             content: data.msg
                         });
-                        this.$router.push({ name: this.$route.query.redirect || 'articleAdd'});
+                        this.$router.push({ name: 'articleAdd'});
                     } else {
                         c.msg({
                             type: 'error',
@@ -101,10 +107,14 @@
 </script>
 
 <style lang="less">
+    .cdl-form-login {
+        margin-bottom: 30px;
+    }
     #blog-login {
         width: 100%;
         height: 100%;
         background-color: @bg;
+        color: @blue;
     }
     #blog-login-title {
         text-align: center;
@@ -118,7 +128,7 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        background-color: @white;
+        background-color: #fff;
         background-size: cover;
         padding-bottom: 0;
         padding: 30px;
@@ -134,12 +144,12 @@
         border-top: 1px solid @color;
         color: @color;
         font-size: 20px;
-        background-color: @white;
+        background-color: #fff;
     }
     .login-title span {
         position: relative;
         padding: 20px;
-        background-color: @white;
+        background-color: #fff;
         top: -13px;
     }
     .login-btn {

@@ -3,10 +3,11 @@
         <h1 id="logo">
             <a title="logo" href="#">
                 <img src="@/assets/img/logo.png" alt="logo">
+                <span id="logo-text">chandler</span>
             </a>
         </h1>
         <section id="header-cnt">
-            <a id="login-out" href="javascript:;" @click="loginOut"><i class="login-out-icon fa fa-mail-reply-all"></i>注 销</a>
+            <a href="javascript:;" id="login-out" title="注销" @click="loginOut">注 销</a>
             <span id="say-hello">欢迎您，{{username}}</span>
         </section>
     </header>
@@ -22,6 +23,7 @@
         methods: {
             loginOut() {
                 window.localStorage.removeItem('token');
+                window.localStorage.removeItem('uid');
                 window.localStorage.removeItem('username');
                 this.$router.push({ name: 'login'});
                 c.msg({
@@ -33,11 +35,34 @@
 </script>
 
 <style lang="less">
+    #logo {
+        float: left;
+        width: @asideW;
+        height: 100%;
+        text-align: center;
+    }
+    #logo img {
+        width: 40px;
+        vertical-align: middle;
+    }
+    #logo-text {
+        color: @color;
+        font-size: 28px;
+        vertical-align: middle;
+        font-weight: bold;
+    }
+    #header-cnt {
+        float: left;
+        position: relative;
+        width: calc(100% - @asideW);
+        height: 100%;
+        font-size: 12px;
+        box-sizing: border-box;
+        padding-right: 10px;
+    }
     #say-hello {
         float: right;
-        padding-top: 14px;
-        padding-bottom: 14px;
-        margin-right: 150px;
+        margin-right: 70px;
     }
     #login-out {
         position: absolute;
@@ -45,17 +70,11 @@
         right: 0;
         top: 0;
         box-sizing: border-box;
-        padding: 12px 20px;
-        color: @white;
-        font-size: 18px;
+        padding: 0 20px;
         transition: .15s;
     }
-    .login-out-icon {
-        padding-right: 8px;
-        font-size: 14px;
-    }
     #login-out:hover {
-        background-color: @bg;
-        color: @color;
+        background-color: @blue;
+        color: #fff;
     }
 </style>

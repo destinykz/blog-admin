@@ -1,12 +1,11 @@
 <template>
     <div id="main-inner">
         <Header></Header>
-        <section id="content" class="clear">
+        <section id="all" class="clear">
             <Aside></Aside>
             <main id="main">
                 <transition name="slide">
-                    <router-view>
-                    </router-view>
+                    <router-view></router-view>
                 </transition>
             </main>
         </section>
@@ -25,74 +24,47 @@
 </script>
 
 <style lang="less">
-    @asideW: 210px;
     #main-inner {
         width: 100%;
         height: 100%;
     }
     #header {
-        height: 50px;
-        background-color: @blue;
+        height: @headerH;
+        line-height: @headerH;
+        background-color: @bg;
+        color: @color;
     }
-    #content {
-        height: calc(100% - 50px);
+    #all {
+        position: absolute;
+        left: 0;
+        top: @headerH;
+        right: 0;
+        bottom: 0;
     }
     #aside {
-        float: left;
-        position: relative;
+        display: inline-block;
         width: @asideW;
         height: 100%;
-        background-color: @white;
-    }
-    #aside:after {
-        content: '';
-        position: absolute;
-        width: 1px;
-        height: 100%;
-        right: 0;
-        top: 0;
-        background-color: darken(@white, 2%);
-        z-index: 50;
+        background-color: @bg;
     }
     #main {
-        position: relative;
-        float: right;
-        width: calc(100% - @asideW);
-        height: 100%;
-        background-color: @bg;
+        position: absolute;
+        left: @asideW;
+        top: 0;
+        right: 10px;
+        bottom: 0;
         box-sizing: border-box;
-        padding: 30px;
-        padding-bottom: 0;
-        overflow-x: hidden;
+        border: 1px solid darken(@bg, 10%);
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        background-color: #fff;
+        overflow: hidden;
         overflow-y: auto;
-    }
-    #logo {
-        float: left;
-        width: @asideW;
-        height: 100%;
-        background-color: @bg;
-        color: @blue;
-        text-align: center;
-    }
-    #logo a {
-        display: block;
-        height: 100%;
-    }
-    #logo img {
-        width: 130px;
-        margin-top: 6%;
-    }
-    #header-cnt {
-        float: left;
-        position: relative;
-        width: calc(100% - @asideW);
-        height: 100%;
-        color: @white;
     }
     .slide-enter-active, .slide-leave-active {
         transition: .3s;
     }
-    .slide-enter, .slide-leave-to /* .slide-leave-active below version 2.1.8 */ {
+    .slide-enter, .slide-leave-to {
         position: absolute;
         transform: translateX(100px);
         opacity: 0;

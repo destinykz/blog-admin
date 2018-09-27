@@ -27,6 +27,11 @@ ul {
     display: block;
     clear: both;
 }
+table {
+    border: none;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
 html, body {
     width: 100%;
     height: 100%;
@@ -45,10 +50,9 @@ input[type="file"] {
 }
 // 表单
 @formTitleW: 70px;
-.cdl-form-item {
+.cdl-form-wrap {
     position: relative;
     min-height: 40px;
-    margin-bottom: 30px;
 }
 .cdl-form-title {
     position: absolute;
@@ -64,33 +68,21 @@ input[type="file"] {
 .cdl-form-cnt {
     padding-left: @formTitleW;
 }
-.cdl-text {
+.cdl-text, .cdl-area {
     display: inline-block;
     width: 100%;
     box-sizing: border-box;
-    background-color: #fff;
-    border-radius: 4px;
     border: 1px solid darken(@bg, 5%);
+    border-radius: 4px;
     color: @color;
     font-size: inherit;
     height: 40px;
     line-height: 40px;
     padding: 0 15px;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 }
 .cdl-area {
-    display: inline-block;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #fff;
-    border-radius: 4px;
-    border: 1px solid darken(@bg, 5%);
-    color: @color;
-    font-size: 14px;
-    min-height: 80px;
-    line-height: 28px;
-    padding: 0 15px;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    min-height: 100px;
+    line-height: 24px;
 }
 .cdl-text:focus, .cdl-area:focus {
     border: 1px solid @blue;
@@ -130,40 +122,31 @@ input[type="file"] {
 }
 /* 成功 */
 .cdl-msg.success {
-	background-color: lighten(@green, 5%);
-	border-color: lighten(@green, 3%);
-}
-/* 警告 */
-.cdl-msg.warning {
-    background-color: lighten(@yellow, 5%);
-    border-color: lighten(@yellow, 3%);
-}
-/* 消息 */
-.cdl-msg.info {
-	background-color: lighten(@color, 5%);
-    border-color: lighten(@color, 3%);
+	background-color: @blue;
+	border-color: @blue;
 }
 /* 错误 */
 .cdl-msg.error {
-	background-color: lighten(@red, 5%);
-	border-color: lighten(@red, 3%);
+	background-color: @red;
+	border-color: @red;
 }
 // 按钮
 .cdl-button {
     display: inline-block;
     cursor: pointer;
-    color: @white;
     text-align: center;
     transition: .1s;
     font-weight: 500;
     user-select: none;
     font-size: 14px;
+    border: 1px solid @blue;
+    color: @blue;
     border-radius: 4px;
-    padding: 10px 20px;
+    padding: 8px 20px;
 }
 // 蓝按钮
 .cdl-button.blue {
-    border: none;
+    color: #fff;
     background-color: @blue;
 }
 .cdl-button.blue:hover {
@@ -171,26 +154,6 @@ input[type="file"] {
 }
 .cdl-button.blue:active {
     background-color: darken(@blue, 3%);
-}
-// 黄按钮
-.cdl-button.yellow {
-    background-color: @yellow;
-}
-.cdl-button.yellow:hover {
-    background-color: lighten(@yellow, 3%);
-}
-.cdl-button.yellow:active {
-    background-color: darken(@yellow, 3%);
-}
-// 绿按钮
-.cdl-button.green {
-    background-color: @green;
-}
-.cdl-button.green:hover {
-    background-color: lighten(@green, 3%);
-}
-.cdl-button.green:active {
-    background-color: darken(@green, 3%);
 }
 // 红按钮
 .cdl-button.red {
@@ -215,7 +178,7 @@ input[type="file"] {
     position: absolute;
     display: table;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
     color: @blue;
     left: 0;
     top: 0;

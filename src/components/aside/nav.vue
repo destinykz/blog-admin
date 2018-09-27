@@ -1,8 +1,8 @@
 <template>
     <nav id="nav-box">
         <ul class="nav-list">
-            <li class="nav-item nav-main-item" :class="{'act': index === 1}">
-                <a href="javascript:;" class="nav-inner nav-main-inner" @click="navSlide">
+            <li class="nav-item nav-main-item">
+                <a href="javascript:;" class="nav-inner nav-main-inner" :class="{'act': index === 0}" @click="navSlide">
                     <i class="nav-icon fa fa-book"></i>
                     <span class="nav-text">文章管理</span>
                     <i class="nav-dir-icon fa fa-angle-down"></i>
@@ -32,8 +32,8 @@
                     </router-link>
                 </ul>
             </li>
-            <li class="nav-item nav-main-item" :class="{'act': index === 2}">
-                <a href="javascript:;" class="nav-inner nav-main-inner" @click="navSlide">
+            <li class="nav-item nav-main-item">
+                <a href="javascript:;" class="nav-inner nav-main-inner" :class="{'act': index === 2}" @click="navSlide">
                     <i class="nav-icon fa fa-cubes"></i>
                     <span class="nav-text">分类管理</span>
                     <i class="nav-dir-icon fa fa-angle-down"></i>
@@ -68,6 +68,7 @@
                 to="/admin/userList"
                 tag="li"
                 @click.native="navClick($event, 3)"
+                active-class="act"
                 :class="{'act': index === 3}">
                 <a href="javascript:;" class="nav-inner nav-main-inner">
                     <i class="fa nav-icon fa-user-circle"></i>
@@ -79,6 +80,7 @@
                 to="/admin/commentList"
                 tag="li"
                 @click.native="navClick($event, 4)"
+                active-class="act"
                 :class="{'act': index === 4}">
                 <a href="javascript:;" class="nav-inner nav-main-inner">
                     <i class="nav-icon fa fa-comments"></i>
@@ -93,17 +95,16 @@
     export default {
         data() {
             return {
-                index: 1
+                index: 0
             }
         },
         methods: {
             navSlide(e) {
                 const target = c.parent(e.target, 'nav-main-item');
                 const subNav = target.getElementsByClassName('sub-nav')[0];
-                const dirIcon = target.getElementsByClassName('nav-dir-icon')[0];
                 if( subNav ) {
                     c.slideToggle(subNav, 100);
-                    c.toggleClass(dirIcon, 'rotate');
+                    c.toggleClass(target, 'nav-rotate');
                 }
             },
             navClick(e, index) {
@@ -112,13 +113,10 @@
             }
         },
         mounted() {
-            const target = document.getElementsByClassName('nav-main-item')[this.index - 1];
-            const subNav = target.getElementsByClassName('sub-nav')[0];
-            const dirIcon = target.getElementsByClassName('nav-dir-icon')[0];
-            if( subNav ) {
-                c.slideToggle(subNav, 100);
-                c.toggleClass(dirIcon, 'rotate');
-            }
+            const mainNav = document.getElementsByClassName('nav-main-item');
+            const subNav = document.getElementsByClassName('sub-nav');
+            c.toggleClass(mainNav[this.index ], 'nav-rotate');
+            c.slideToggle(subNav[this.index], 100);
         }
     }
 </script>
@@ -130,7 +128,7 @@
     .nav-item {
         box-sizing: border-box;
         color: @color;
-        font-size: 13px;
+        font-size: 14px;
         transition: background-color .2s;
     }
     .nav-inner {
@@ -141,9 +139,9 @@
         height: 100%;
         padding: 15px;
     }
-    .nav-main-item:hover, .nav-main-item.act {
+    .nav-main-inner:hover, .nav-main-inner.act {
         background-color: @blue;
-        color: @white;
+        color: #fff;
     }
     .nav-main-inner span {
         font-weight: normal;
@@ -159,23 +157,25 @@
         top: 18px;
         transition: .15s;
     }
-    .nav-dir-icon.rotate {
+    .nav-main-item.nav-rotate .nav-dir-icon {
         transform: rotate(180deg);
     }
     .nav-text {
         padding-left: 10px;
     }
     .sub-nav {
+        background-color: lighten(@bg, 2%);
         display: none;
-        background-color: @bg;
     }
     .nav-sub-item {
-        transition: padding .4s;
+        transition: .15s;
         padding-left: 10px;
+    }
+    .nav-sub-item:hover {
+        color: @blue;
+        transform: translateX(5px);
     }
     .nav-sub-item:hover, .nav-sub-item.act {
         color: @blue;
-        background-color: @white;
-        padding-left: 15px;
     }
 </style>
