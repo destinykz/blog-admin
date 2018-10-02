@@ -6,9 +6,13 @@ import router from './router/router'
 import '@/assets/css/public.less'
 // 工具函数
 import '@/utils/utils'
-// 服务函数
+// 接口函数
 import '@/server/server'
 
+// markdown编辑器
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+Vue.use(mavonEditor)
 
 Vue.config.productionTip = false
 

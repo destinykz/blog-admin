@@ -85,6 +85,7 @@
                         c.msg({
                             content: data.msg
                         });
+                        // 导航跳转
                         this.$router.push({ name: 'articleAdd'});
                     } else {
                         c.msg({

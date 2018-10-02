@@ -20,12 +20,12 @@
             <div class="cdl-form-wrap">
                 <span class="cdl-form-title">文章图片</span>
                 <div class="cdl-form-cnt">
-                    <label for="uploadImg" class="cdl-button blue"><i class="fa fa-upload"></i>&nbsp;&nbsp;上传主图</label>
-                    <input type="file" id="uploadImg" @change="uploadImg" :value="uploadImgVal">
+                    <label for="uploadImg" class="cdl-button blue"><i class="fa fa-upload"></i>&nbsp;&nbsp;上传文章封面</label>
+                    <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple="multiple" id="uploadImg" @change="uploadImg" :value="fileVal" />
                 </div>
-                <div id="imgview" v-show="base64">
-                    <i class="uploadImgClose cdl-close fa fa-close" @click="closeUploadImg"></i>
-                    <img :src="base64" alt="预览图片">
+                <div id="imgview" v-show="articleData.cover">
+                    <i class="uploadImgClose cdl-close fa fa-close" title="移除这张图片" @click="closeUploadImg"></i>
+                    <img :src="articleData.cover" alt="主图">
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
         </div>
         <div class="cdl-form-item">
             <div class="cdl-form-wrap">
-                <MarkDown @on-save="saveMarkDown"></MarkDown>
+                <mavon-editor ref="md" @imgAdd="imgAdd" :ishljs="true" @save="articleSave"></mavon-editor>
             </div>
         </div>
         <div class="cdl-form-item">
@@ -52,66 +52,67 @@
     </div>
 </template>
 <script>
-    import MarkDown from 'vue-meditor'
-    import {addArticle, tagList} from '@/server/server'
+    import {addArticle, tagList, uploadImg} from '@/server/server'
     export default {
-        components: {
-            MarkDown
-        },
         data() {
             return {
-                uploadImgVal: '', // input[type="file"] 的值
+                fileVal: '', // input[type="file"] 的值
                 tagList: [], // 文章标签值
-                base64: '', // 图片base64
                 articleData: {
                     title: '', // 标题
                     preface: '', // 前言
-                    base64: this.base64, // 图片
+                    cover: '', // 图片
                     tag_id: 0, // 标签
                     content: '' // 内容
                 }
             }
         },
-        mounted() {
-            tagList()
-            .then(({data}) => {
+        beforeCreate() {
+            tagList().then(({data}) => {
                 this.tagList = data.tagList;
             })
         },
         methods: {
-            // 上传图片
+            // 上传封面图
             uploadImg(e) {
-                const _this = this;
+                const loading = new c.Loading('正在上传...');
                 const file = e.target.files[0];
-                // 如果是图片
-                if( file.type.match(/image\/(png|jpg|gif|jpeg)$/) ) {
-                    c.compress(file, 200)
-                    .then(base64 => {
-                        _this.uploadImgShow = true;
-                        _this.base64 = base64;
-                    })
-                    .catch(() => {
-                        c.msg({
-                            type: 'error',
-                            content: '您的浏览器版本不支持压缩，请更换为现代浏览器！'
-                        })
-                    })
-                } else {
-                    this.closeUploadImg();
-                    c.msg({
-                        type: 'error',
-                        content: '仅支持图片格式！'
-                    })
-                }
+
+                const formdata = new FormData();
+                formdata.append('image', file);
+
+                uploadImg(formdata).then(({data}) => {  
+                    // 保存图片地址
+                    this.articleData.cover = data.url;
+                })
+                .finally(() => {
+                    loading.close();
+                })
+
             },
-            // 关闭图片
+            // 关闭预览图片
             closeUploadImg() {
-                this.uploadImgVal = '';
-                this.base64 = '';
+                this.articleData.cover = '';
+                // 清空input file的值
+                this.fileVal = '';
             },
-            // 保存markdown内容
-            saveMarkDown(mdCnt) {
-                this.articleData.content = mdCnt.htmlValue;
+            // 文章内容保存
+            articleSave(markdownText, markdownHtml) {
+                this.articleData.content = markdownHtml;
+            },
+            // markdown 上传图片
+            imgAdd(pos, file) {
+                const $mavon = this.$refs.md;
+                const loading = new c.Loading('正在上传，请稍后~');
+                // 创建表单
+                const formdata = new FormData();
+                formdata.append('image', file);
+                uploadImg(formdata).then(({data}) => {
+                    $mavon.$img2Url(pos, data.url);
+                })
+                .finally(() => {
+                    loading.close();
+                });
             },
             // 文章发布
             send() {
@@ -143,23 +144,18 @@
                     });
                     return;
                 }
-                // 文章发布
-                this.articleData.base64 = this.base64.replace(/data:image\/png\;base64\,/, '');
                 // 发布loading图
                 const loading = new c.Loading('正在添加，请耐心等待！')
                 addArticle(this.articleData)
                 .then(({data}) => {
-                    let type = 'success';
-                    if( data.code === 1 ) type = 'error';
                     c.msg({
-                        type,
                         content: data.msg
-                    })
+                    });
+                    this.$router.push({ name: 'articleList' });
                 })
                 .finally(() => {
-                    // 关闭loading
                     loading.close();
-                })
+                });
             }
         }
     }
@@ -190,26 +186,6 @@
         top: -16px;
         color: @color;
     }
-    .markdown {
-        background: none !important;
-    }
-    .markdown .markdown-toolbars {
-        height: 40px !important;
-        box-shadow: none !important;
-        border-bottom: none !important;
-        color: @color !important;
-    }
-    .markdown .markdown-content .markdown-editor .index {
-        background-color: #fafbfc !important;
-    }
-    .markdown .markdown-content .markdown-editor .index li {
-        background-color: @bg  !important;
-        color: @color !important;
-    }
-    .markdown .markdown-content .markdown-editor textarea {
-        background-color: @bg !important;
-        color: @color !important;
-    }
     #imgview {
         display: inline-block;
         position: relative;
@@ -226,26 +202,7 @@
         top: -16px;
         color: @color;
     }
-    .markdown {
-        background: none !important;
-    }
-    .markdown .markdown-toolbars {
-        height: 40px !important;
-        box-shadow: none !important;
-        border-bottom: none !important;
-        color: @color !important;
-    }
-    .markdown .markdown-content .markdown-editor .index {
-        background-color: lighten(@bg, 1%) !important;
-    }
-    .markdown .markdown-content .markdown-editor .index li {
-        background-color: @bg  !important;
-        color: @color !important;
-    }
-    .markdown .markdown-content .markdown-preview {
-        background-color: @bg !important;
-    }
-    .markdown-preview p {
-        color: @color !important;
+    .markdown-body img {
+        width: 300px !important;
     }
 </style>

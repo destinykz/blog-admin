@@ -45,8 +45,9 @@ input, button, textarea, select {
     background: none;
     outline: none;
 }
+// 上传文件input隐藏
 input[type="file"] {
-    display: none;
+    opacity: 0;
 }
 // 表单
 @formTitleW: 70px;
@@ -103,7 +104,7 @@ input[type="file"] {
 	color: #fff;
 	overflow: hidden;
 	padding: 11px 15px 11px 20px;
-	z-index: 50;
+	z-index: 5000;
 	
 	opacity: 0;
 	transform: translateY(-100%);
@@ -183,7 +184,7 @@ input[type="file"] {
     left: 0;
     top: 0;
     text-align: center;
-    z-index: 1000;
+    z-index: 9999;
 }
 .cdl-loading .cdl-loading-cnt {
     display: table-cell;

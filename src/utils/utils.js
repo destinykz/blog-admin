@@ -311,38 +311,37 @@ c.toggleClass = function(el, cls) {
 })();
 // 图片压缩
 ;(function() {
-    c.compress = function(file, w) {
+    c.compress = function(src, w) {
         return new Promise((resolve, reject) => {
-            if( FileReader ) {
-                const fileRead = new FileReader();
-                fileRead.onload = function() {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const scale = img.width / w;
-                        canvas.width = w;
-                        const h = img.height / scale;
-                        canvas.height = h;
-    
-                        const draw = canvas.getContext('2d');
-                        
-                        draw.drawImage(img, 0, 0, w, h);
-    
-                        const base64 = canvas.toDataURL('image/png');
-    
-                        resolve(base64);
-                    }
-                    img.src = this.result;
-                };
-                fileRead.readAsDataURL(file);
-            }else {
-                reject();
-            }
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                // 如果传递了大小，就压缩
+                let imgWidth = img.width;
+                let imgHeight = img.height;
+                if(w) {
+                    const scale = imgWidth / w;
+                    imgWidth = w;
+                    imgHeight /= scale;
+                }
+                canvas.width = imgWidth;
+                canvas.height = imgHeight;
+                const draw = canvas.getContext('2d');
+                draw.drawImage(img, 0, 0, imgWidth, imgHeight);
+
+                const base64 = canvas.toDataURL('image/png', 0.1);
+
+                resolve(base64);
+            };
+            img.onerror = function(err) {
+                reject(err);
+            };
+            img.src = src;
         });
     };
 })();
 // 登录背景canvas
-(function() {
+;(function() {
     const Heart = function(box) {
         const canvas = document.createElement('canvas');
         canvas.style.position = 'fixed';

@@ -12,7 +12,6 @@
         </section>
     </header>
 </template>
-
 <script>
     export default {
         computed: {
@@ -33,7 +32,6 @@
         }
     }
 </script>
-
 <style lang="less">
     #logo {
         float: left;
@@ -62,7 +60,7 @@
     }
     #say-hello {
         float: right;
-        margin-right: 70px;
+        margin-right: 80px;
     }
     #login-out {
         position: absolute;
@@ -71,6 +69,7 @@
         top: 0;
         box-sizing: border-box;
         padding: 0 20px;
+        margin-right: 10px;
         transition: .15s;
     }
     #login-out:hover {

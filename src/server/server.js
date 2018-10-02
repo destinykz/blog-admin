@@ -17,8 +17,6 @@ http.interceptors.request.use(function (config) {
     config.headers.token = window.localStorage.getItem('token') || '';
     config.headers.uid = window.localStorage.getItem('uid') || '';
     return config;
-}, function (error) {
-    return Promise.reject(error);
 });
 // 请求后
 http.interceptors.response.use(
@@ -65,4 +63,17 @@ export const addArticle = articleData => {
 // 查询列表值
 export const tagList = () => {
     return http.post('admin/getTagList');
+}
+// markdown 上传图片
+export const uploadImg = formdata => {
+    return axios({
+        url: 'http://localhost:1111/admin/uploadImg',
+        method: 'post',
+        data: formdata,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            uid: window.localStorage.getItem('uid'),
+            token: window.localStorage.getItem('token')
+        },
+    });
 }
