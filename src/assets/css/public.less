@@ -1,3 +1,19 @@
+// 滑块
+&::-webkit-scrollbar {
+    width: 10px;
+}
+// 轨道
+&::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+/*定义滑块 内阴影+圆角*/
+&::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background-color: #c1c1c1;
+}
+&::-webkit-scrollbar-thumb:hover {
+    background-color: #a8a8a8;
+}
 body, ul, h1, h2, h3, p {
     margin: 0;
     padding: 0;
@@ -47,7 +63,7 @@ input, button, textarea, select {
 }
 // 上传文件input隐藏
 input[type="file"] {
-    opacity: 0;
+    display: none;
 }
 // 表单
 @formTitleW: 70px;

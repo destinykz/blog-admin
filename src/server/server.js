@@ -1,11 +1,10 @@
 import axios from 'axios'
 import router from "@/router/router";
 const http = axios.create({
-    baseURL: 'http://localhost:1111',
+    baseURL: 'http://localhost:1111/admin',
     responseType: 'json',
     transformResponse: [data => {
         if( data.token ) {
-            window.localStorage.setItem('uid', data.uid);
             window.localStorage.setItem('username', data.username);
             window.localStorage.setItem('token', data.token);
         }
@@ -15,7 +14,6 @@ const http = axios.create({
 // 请求前
 http.interceptors.request.use(function (config) {
     config.headers.token = window.localStorage.getItem('token') || '';
-    config.headers.uid = window.localStorage.getItem('uid') || '';
     return config;
 });
 // 请求后
@@ -26,7 +24,6 @@ http.interceptors.response.use(
     err => {
         if( err.response.status === 401 ) {
             window.localStorage.removeItem('token');
-            window.localStorage.removeItem('uid');
             window.localStorage.removeItem('username');
             c.msg({
                 type: 'error',
@@ -47,33 +44,24 @@ http.interceptors.response.use(
 
 // 检查是否登陆
 export const checkLogin = () => {
-    return http.post('user/checkLogin');
+    return http.post('/user/checkLogin');
 }
 // 登录
 export const login = (username, password) => {
-    return http.post('user/login', {
+    return http.post('/user/login', {
         username,
         password
     })
 }
 // 添加文章
 export const addArticle = articleData => {
-    return http.post('admin/articleAdd', {articleData});
-}
-// 查询列表值
-export const tagList = () => {
-    return http.post('admin/getTagList');
+    return http.post('/article/articleAdd', {articleData});
 }
 // markdown 上传图片
 export const uploadImg = formdata => {
-    return axios({
-        url: 'http://localhost:1111/admin/uploadImg',
-        method: 'post',
-        data: formdata,
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            uid: window.localStorage.getItem('uid'),
-            token: window.localStorage.getItem('token')
-        },
-    });
+    return http.post('/article/uploadImg', formdata);
+}
+// 查询分类
+export const tagList = () => {
+    return http.post('/tag/getTagList');
 }

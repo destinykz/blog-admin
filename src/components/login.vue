@@ -50,28 +50,28 @@
             login() {
                 if( this.username.trim() === '' ) {
                     c.msg({
-                        type: 'warning',
+                        type: 'error',
                         content: '请输入用户名！'
                     });
                     return;
                 }
                 if( this.password.trim() === '' ) {
                     c.msg({
-                        type: 'warning',
+                        type: 'error',
                         content: '请输入密码！'
                     });
                     return;
                 }
                 if( this.username.length > 8 ) {
                     c.msg({
-                        type: 'warning',
+                        type: 'error',
                         content: '用户名长度不能大于8位！'
                     });
                     return;
                 }
                 if( this.password.length > 16 ) {
                     c.msg({
-                        type: 'warning',
+                        type: 'error',
                         content: '密码长度不能大于16位！'
                     });
                     return;

@@ -1,4 +1,3 @@
-import Vue from 'vue';
 window.c = {};
 c.width = document.documentElement.clientWidth || document.body.clientWidth;
 c.height = document.documentElement.clientHeight || document.body.clientHeight;
@@ -363,7 +362,6 @@ c.toggleClass = function(el, cls) {
         requestAnimationFrame(() => {
             this.startAni();
         })
-        
     };
     Heart.prototype.init = function () {
         for (let i = 0; i < this.len; i++) {

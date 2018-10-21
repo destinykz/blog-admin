@@ -41,7 +41,7 @@
         </div>
         <div class="cdl-form-item">
             <div class="cdl-form-wrap">
-                <mavon-editor ref="md" @imgAdd="imgAdd" :ishljs="true" @save="articleSave"></mavon-editor>
+                <mavon-editor ref="md" @imgAdd="imgAdd" :ishljs="true" @change="articleSave" @navigationToggle="navigationToggle"></mavon-editor>
             </div>
         </div>
         <div class="cdl-form-item">
@@ -68,8 +68,8 @@
             }
         },
         beforeCreate() {
-            tagList().then(({data}) => {
-                this.tagList = data.tagList;
+            tagList().then((data) => {
+                if(data && data.data.tagList) this.tagList = data.data.tagList;
             })
         },
         methods: {
@@ -90,7 +90,7 @@
                 })
 
             },
-            // 关闭预览图片
+            // 关闭封面图
             closeUploadImg() {
                 this.articleData.cover = '';
                 // 清空input file的值
@@ -156,6 +156,9 @@
                 .finally(() => {
                     loading.close();
                 });
+            },
+            navigationToggle(a, b) {
+                console.log(b);
             }
         }
     }
@@ -180,25 +183,9 @@
     }
     #imgview .uploadImgClose {
         position: absolute;
-        font-size: 16px;
-        right: -16px;
-        top: -16px;
-        color: @color;
-    }
-    #imgview {
-        display: inline-block;
-        position: relative;
-        margin-top: 20px;
-    }
-    #imgview img {
-        display: block;
-        width: 200px;
-    }
-    #imgview .uploadImgClose {
-        position: absolute;
-        font-size: 16px;
-        right: -16px;
-        top: -16px;
+        font-size: 20px;
+        right: -18px;
+        top: -18px;
         color: @color;
     }
     .markdown-body img {

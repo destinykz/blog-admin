@@ -72,15 +72,22 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    if( to.name !== 'login' ) {
+    if( to.name === 'login' ) next();
+    else {
         try {
             // 验证登录
             checkLogin().then(({data}) => {
                 if(data.code === 0) next();
-                else next({
-                    path: '/login',
-                    query: { redirect: to.name }
-                });
+                else {
+                    c.msg({
+                        type: 'error',
+                        content: data.msg
+                    });
+                    next({
+                        path: '/login',
+                        query: { redirect: to.name }
+                    });
+                }
             });
         } catch (err) {
             next({
@@ -88,7 +95,7 @@ router.beforeEach((to, from, next) => {
                 query: { redirect: to.name }
             });
         }
-    } else next();
+    }
 })
 
 export default router;

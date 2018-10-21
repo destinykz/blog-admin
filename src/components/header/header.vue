@@ -22,7 +22,6 @@
         methods: {
             loginOut() {
                 window.localStorage.removeItem('token');
-                window.localStorage.removeItem('uid');
                 window.localStorage.removeItem('username');
                 this.$router.push({ name: 'login'});
                 c.msg({
