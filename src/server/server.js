@@ -1,10 +1,10 @@
 import axios from 'axios'
 import router from "@/router/router";
 const http = axios.create({
-    baseURL: 'http://localhost:1111/admin',
+    baseURL: 'http://192.168.1.35:1111/admin',
     responseType: 'json',
     transformResponse: [data => {
-        if( data.token ) {
+        if (data.token) {
             window.localStorage.setItem('username', data.username);
             window.localStorage.setItem('token', data.token);
         }
@@ -22,7 +22,7 @@ http.interceptors.response.use(
         return response
     },
     err => {
-        if( err.response.status === 401 ) {
+        if (err.response.status === 401) {
             window.localStorage.removeItem('token');
             window.localStorage.removeItem('username');
             c.msg({
@@ -55,7 +55,19 @@ export const login = (username, password) => {
 }
 // 添加文章
 export const addArticle = articleData => {
-    return http.post('/article/articleAdd', {articleData});
+    return http.post('/article/articleAdd', { articleData });
+}
+// 获取文章列表
+export const articleList = articleData => {
+    return http.post('/article/articleList', { articleData });
+}
+// 通过aid请求文章内容
+export const articleContentByAid = aid => {
+    return http.post('/article/articleContentByAid', { aid });
+}
+// 删除文章
+export const articleDel = aid => {
+    return http.post('/article/articleDel', { aid });
 }
 // markdown 上传图片
 export const uploadImg = formdata => {

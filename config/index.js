@@ -9,18 +9,18 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      '/blog': {
-        target: 'http://localhost:8001',
-        'secure': false,
-        'changeOrigin': true,
-        'pathRewrite': {
-          '^/blog': ''
-        }
-      }
-    },
+    // proxyTable: {
+    //   '/blog': {
+    //     target: 'http://localhost:8001',
+    //     'secure': false,
+    //     'changeOrigin': true,
+    //     'pathRewrite': {
+    //       '^/blog': ''
+    //     }
+    //   }
+    // },
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 2222, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

@@ -24,6 +24,7 @@
                 </div>
                 <div class="cdl-form-login">
                     <div class="cdl-form-wrap">
+                        <div class="cdl-form-title"></div>
                         <div class="cdl-form-cnt">
                             <button type="button" class="login-btn cdl-button blue" @click="login">登录</button>
                         </div>
@@ -151,7 +152,7 @@
         position: relative;
         padding: 20px;
         background-color: #fff;
-        top: -13px;
+        top: -11px;
     }
     .login-btn {
         width: 100%;

@@ -19,7 +19,7 @@ import commentList from '@/components/main/comment/comment-list'
 
 Vue.use(Router)
 
-import {checkLogin} from '@/server/server'
+import { checkLogin } from '@/server/server'
 
 const router = new Router({
     mode: 'history',
@@ -39,6 +39,12 @@ const router = new Router({
                     path: 'articleAdd',
                     alias: '',
                     name: 'articleAdd',
+                    component: articleAdd
+                },
+                {
+                    path: 'articleEdit/:aid',
+                    alias: '',
+                    name: 'articleEdit',
                     component: articleAdd
                 },
                 {
@@ -72,12 +78,12 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    if( to.name === 'login' ) next();
+    if (to.name === 'login') next();
     else {
         try {
             // 验证登录
-            checkLogin().then(({data}) => {
-                if(data.code === 0) next();
+            checkLogin().then(({ data }) => {
+                if (data.code === 0) next();
                 else {
                     c.msg({
                         type: 'error',
@@ -96,6 +102,12 @@ router.beforeEach((to, from, next) => {
             });
         }
     }
-})
+});
+router.afterEach(() => {
+    let main;
+    if (main = document.getElementById('main')) setTimeout(() => {
+        main.scrollTop = 0;
+    }, 0);
+});
 
 export default router;
