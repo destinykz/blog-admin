@@ -1,53 +1,80 @@
 <template>
-    <div id="article-add">
-        <div class="cdl-form-item">
-            <div class="cdl-form-wrap">
-                <span class="cdl-form-title">文章标题</span>
-                <div class="cdl-form-cnt">
-                    <input type="text" class="cdl-text" v-focus maxlength="50" placeholder="请输入文章标题" v-model="articleData.title">
-                </div>
-            </div>
+  <div id="article-add">
+    <div class="cdl-form-item">
+      <div class="cdl-form-wrap">
+        <span class="cdl-form-title">文章标题</span>
+        <div class="cdl-form-cnt">
+          <input
+            type="text"
+            class="cdl-text"
+            v-focus
+            maxlength="50"
+            placeholder="请输入文章标题"
+            v-model="articleData.title"
+          >
         </div>
-        <div class="cdl-form-item">
-            <div class="cdl-form-wrap">
-                <span class="cdl-form-title">文章前言</span>
-                <div class="cdl-form-cnt">
-                    <textarea class="cdl-area" placeholder="请输入文章前言"  maxlength="500" v-model="articleData.preface"></textarea>
-                </div>
-            </div>
-        </div>
-        <div class="cdl-form-item">
-            <div class="cdl-form-wrap">
-                <span class="cdl-form-title">文章图片</span>
-                <div class="cdl-form-cnt">
-                    <label for="uploadImg" class="cdl-button blue"><i class="fa fa-upload"></i>&nbsp;&nbsp;上传文章封面</label>
-                    <input type="file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple="multiple" id="uploadImg" @change="uploadImg" :value="fileVal" />
-                </div>
-            </div>
-            <div id="cover" v-show="articleData.cover">
-                <i class="uploadImgClose cdl-close fa fa-close" title="移除这张图片" @click="closeUploadImg"></i>
-                <img :src="articleData.cover" alt="主图">
-            </div>
-        </div>
-        <div class="cdl-form-item">
-            <div class="cdl-form-wrap">
-                <span class="cdl-form-title">文章标签</span>
-                <div class="cdl-form-cnt">
-                    <select class="cdl-text" v-model="articleData.tag_id">
-                        <option v-for="tag in tagList" :key="tag.tid" :value="tag.tid">{{tag.tag_val}}</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="cdl-form-item">
-          <mavon-editor ref="md" :value="articleData.markdownText" @imgAdd="imgAdd" :ishljs="true" @change="articleSave"></mavon-editor>
-        </div>
-        <div class="cdl-form-item">
-            <div class="cdl-form-wrap">
-                <button type="button" class="cdl-button blue" @click="send">{{send_btn_text}}</button>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="cdl-form-item">
+      <div class="cdl-form-wrap">
+        <span class="cdl-form-title">文章前言</span>
+        <div class="cdl-form-cnt">
+          <textarea
+            class="cdl-area"
+            placeholder="请输入文章前言"
+            maxlength="500"
+            v-model="articleData.preface"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="cdl-form-item">
+      <div class="cdl-form-wrap">
+        <span class="cdl-form-title">文章图片</span>
+        <div class="cdl-form-cnt">
+          <label for="uploadImg" class="cdl-button blue">
+            <i class="fa fa-upload"></i>&nbsp;&nbsp;上传文章封面
+          </label>
+          <input
+            type="file"
+            accept="image/gif, image/jpeg, image/jpg, image/png, image/svg"
+            multiple="multiple"
+            id="uploadImg"
+            @change="uploadImg"
+            :value="fileVal"
+          >
+        </div>
+      </div>
+      <div id="cover" v-show="articleData.cover_name">
+        <i class="uploadImgClose cdl-close fa fa-close" title="移除这张图片" @click="closeUploadImg"></i>
+        <img :src="articleData.cover_domain + '/' + articleData.cover_name" alt="主图">
+      </div>
+    </div>
+    <div class="cdl-form-item">
+      <div class="cdl-form-wrap">
+        <span class="cdl-form-title">文章标签</span>
+        <div class="cdl-form-cnt">
+          <select class="cdl-text" v-model="articleData.tag_id">
+            <option v-for="tag in tagList" :key="tag.tid" :value="tag.tid">{{tag.tag_val}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="cdl-form-item">
+      <mavon-editor
+        ref="md"
+        :value="articleData.markdownText"
+        @imgAdd="imgAdd"
+        :ishljs="true"
+        @change="articleSave"
+      ></mavon-editor>
+    </div>
+    <div class="cdl-form-item">
+      <div class="cdl-form-wrap">
+        <button type="button" class="cdl-button blue" @click="send">{{send_btn_text}}</button>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import {
@@ -65,8 +92,8 @@ export default {
         aid: "",
         title: "", // 标题
         preface: "", // 前言
-        cover: "", // 图片（包括服务器域名）
-        cover_key: "", // 文件路径（不包括服务器域名）
+        cover_domain: "", // 图片（包括服务器域名）
+        cover_name: "", // 文件路径（不包括服务器域名）
         tag_id: "", // 标签
         markdownText: "", // 编辑内容
         markdownHtml: "" // 显示内容
@@ -115,8 +142,9 @@ export default {
 
       uploadImg(formdata)
         .then(({ data }) => {
-          this.articleData.cover = `${data.domain}/${data.key}`;
-          this.articleData.cover_key = data.key;
+          this.articleData.cover_domain = data.domain;
+          this.articleData.cover_name = data.name;
+          console.log(this.articleData.cover_domain, this.articleData.cover_name);
         })
         .finally(() => {
           loading.close();
@@ -124,8 +152,8 @@ export default {
     },
     // 关闭封面图
     closeUploadImg() {
-      this.articleData.cover = "";
-      this.articleData.cover_key = "";
+          this.articleData.cover_domain = '';
+          this.articleData.cover_name = '';
       // 清空input file的值
       this.fileVal = "";
     },
@@ -143,7 +171,7 @@ export default {
       formdata.append("image", file);
       uploadImg(formdata)
         .then(({ data }) => {
-          $mavon.$img2Url(pos, `${data.domain}/${data.key}`);
+          $mavon.$img2Url(pos, `${data.domain}/${data.name}`);
         })
         .finally(() => {
           loading.close();

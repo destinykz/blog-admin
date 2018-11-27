@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from "@/router/router";
 const http = axios.create({
-    baseURL: 'http://192.168.1.35:1111/admin',
+    baseURL: 'http://192.168.1.34:1111/admin',
     responseType: 'json',
     transformResponse: [data => {
         if (data.token) {
