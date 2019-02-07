@@ -19,8 +19,6 @@ import commentList from '@/components/main/comment/comment-list'
 
 Vue.use(Router)
 
-import { checkLogin } from '@/server/server'
-
 const router = new Router({
     mode: 'history',
     routes: [
@@ -76,38 +74,4 @@ const router = new Router({
         }
     ]
 });
-
-router.beforeEach((to, from, next) => {
-    if (to.name === 'login') next();
-    else {
-        try {
-            // 验证登录
-            checkLogin().then(({ data }) => {
-                if (data.code === 0) next();
-                else {
-                    c.msg({
-                        type: 'error',
-                        content: data.msg
-                    });
-                    next({
-                        path: '/login',
-                        query: { redirect: to.name }
-                    });
-                }
-            });
-        } catch (err) {
-            next({
-                path: '/login',
-                query: { redirect: to.name }
-            });
-        }
-    }
-});
-router.afterEach(() => {
-    let main;
-    if (main = document.getElementById('main')) setTimeout(() => {
-        main.scrollTop = 0;
-    }, 0);
-});
-
 export default router;

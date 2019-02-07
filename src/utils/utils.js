@@ -221,33 +221,33 @@ c.removeClass = function (el, cls) {
 c.toggleClass = function (el, cls) {
     if (c.hasClass(el, cls)) c.removeClass(el, cls);
     else c.addClass(el, cls);
-}
-    // loading...
-    ; (function () {
-        const Loading = function (text) {
-            const loading = document.createElement('div');
-            this.loading = loading;
-            loading.className = 'cdl-loading';
-            loading.style.height = (document.documentElement.clientHeight || document.body.clientHeight) + 'px';
-            const loadingCnt = document.createElement('div');
-            loadingCnt.className = 'cdl-loading-cnt';
-            // loadingIcon
-            const loadingIcon = document.createElement('i');
-            loadingIcon.className = 'loading-icon fa fa-cog';
-            // loadingText
-            const loadingText = document.createElement('strong');
-            loadingText.className = 'loading-text';
-            loadingText.innerText = text;
-            loadingCnt.appendChild(loadingIcon);
-            loadingCnt.appendChild(loadingText);
-            loading.appendChild(loadingCnt);
-            document.body.appendChild(loading);
-        }
-        Loading.prototype.close = function () {
-            this.loading.parentNode.removeChild(this.loading);
-        };
-        c.Loading = Loading;
-    })();
+};
+// loading...
+; (function () {
+    const Loading = function (text) {
+        const loading = document.createElement('div');
+        this.loading = loading;
+        loading.className = 'cdl-loading';
+        loading.style.height = (document.documentElement.clientHeight || document.body.clientHeight) + 'px';
+        const loadingCnt = document.createElement('div');
+        loadingCnt.className = 'cdl-loading-cnt';
+        // loadingIcon
+        const loadingIcon = document.createElement('i');
+        loadingIcon.className = 'loading-icon fa fa-cog';
+        // loadingText
+        const loadingText = document.createElement('strong');
+        loadingText.className = 'loading-text';
+        loadingText.innerText = text;
+        loadingCnt.appendChild(loadingIcon);
+        loadingCnt.appendChild(loadingText);
+        loading.appendChild(loadingCnt);
+        document.body.appendChild(loading);
+    }
+    Loading.prototype.close = function () {
+        this.loading.parentNode.removeChild(this.loading);
+    };
+    c.Loading = Loading;
+})();
 // 消息提示
 ; (function () {
     function msg(obj) {

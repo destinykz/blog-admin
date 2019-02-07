@@ -1,46 +1,37 @@
 import axios from 'axios'
 import router from "@/router/router";
 const http = axios.create({
-    baseURL: 'http://192.168.1.34:1111/admin',
-    responseType: 'json',
-    transformResponse: [data => {
-        if (data.token) {
-            window.localStorage.setItem('username', data.username);
-            window.localStorage.setItem('token', data.token);
-        }
-        return data;
-    }]
+    baseURL: 'http://192.168.1.34:8080/admin',
+    responseType: 'json'
 });
-// 请求前
+// 请求拦截器
 http.interceptors.request.use(function (config) {
     config.headers.token = window.localStorage.getItem('token') || '';
     return config;
 });
-// 请求后
-http.interceptors.response.use(
-    response => {
-        return response
-    },
-    err => {
-        if (err.response.status === 401) {
-            window.localStorage.removeItem('token');
-            window.localStorage.removeItem('username');
-            c.msg({
-                type: 'error',
-                content: err.response.data.msg
-            });
-            router.push({
-                name: 'login',
-                query: { redirect: router.history.current.name }
-            });
-        } else {
-            c.msg({
-                type: 'error',
-                content: '服务器发生异常！'
-            });
+// 响应拦截器
+http.interceptors.response.use(function (resData) {
+    var d = resData.data.d;
+    if (resData.status === 200 && resData.data.c === 0) {
+        if (d && d.token) {
+            window.localStorage.setItem('username', d.username);
+            window.localStorage.setItem('token', d.token);
         }
+        if (resData.data.m) c.msg({
+            type: 'success',
+            content: resData.data.m
+        });
+        return d || [];
+    } else {
+        c.msg({
+            type: 'error',
+            content: resData.data.m
+        });
     }
-);
+}, function (e) {
+    // 响应错误直接到登录界面
+    router.push({ name: 'login' });
+});
 
 // 检查是否登陆
 export const checkLogin = () => {

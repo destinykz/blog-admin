@@ -45,9 +45,9 @@
           >
         </div>
       </div>
-      <div id="cover" v-show="articleData.cover_name">
+      <div id="cover" v-show="articleData.cover">
         <i class="uploadImgClose cdl-close fa fa-close" title="移除这张图片" @click="closeUploadImg"></i>
-        <img :src="articleData.cover_domain + '/' + articleData.cover_name" alt="主图">
+        <img :src="articleData.cover" alt="主图">
       </div>
     </div>
     <div class="cdl-form-item">
@@ -92,8 +92,7 @@ export default {
         aid: "",
         title: "", // 标题
         preface: "", // 前言
-        cover_domain: "", // 图片（包括服务器域名）
-        cover_name: "", // 文件路径（不包括服务器域名）
+        cover: "", // 文件路径
         tag_id: "", // 标签
         markdownText: "", // 编辑内容
         markdownHtml: "" // 显示内容
@@ -102,9 +101,9 @@ export default {
     };
   },
   beforeCreate() {
-    // 获取文章所有列表
+    // 获取文章所有标签
     tagList().then(data => {
-      if (data && data.data.tagList) this.tagList = data.data.tagList;
+      this.tagList = data;
     });
   },
   created() {
@@ -114,11 +113,10 @@ export default {
     if (aid) {
       this.send_btn_text = "修改";
       // 通过aid请求文章内容
-      articleContentByAid(aid).then(({ data }) => {
-        const reqArticleData = data.articleData;
+      articleContentByAid(aid).then(data => {
         const articleData = this.articleData;
         for (const key in articleData) {
-          articleData[key] = reqArticleData[key];
+          articleData[key] = data[key];
         }
       });
     }
@@ -134,17 +132,15 @@ export default {
   methods: {
     // 上传封面图
     uploadImg(e) {
-      const loading = new c.Loading("正在上传...");
+      const loading = new c.Loading("正在上传，请稍后~");
       const file = e.target.files[0];
 
       const formdata = new FormData();
       formdata.append("image", file);
 
       uploadImg(formdata)
-        .then(({ data }) => {
-          this.articleData.cover_domain = data.domain;
-          this.articleData.cover_name = data.name;
-          console.log(this.articleData.cover_domain, this.articleData.cover_name);
+        .then(data => {
+          this.articleData.cover = data.src;
         })
         .finally(() => {
           loading.close();
@@ -152,8 +148,7 @@ export default {
     },
     // 关闭封面图
     closeUploadImg() {
-          this.articleData.cover_domain = '';
-          this.articleData.cover_name = '';
+      this.articleData.cover = "";
       // 清空input file的值
       this.fileVal = "";
     },
@@ -170,8 +165,8 @@ export default {
       const formdata = new FormData();
       formdata.append("image", file);
       uploadImg(formdata)
-        .then(({ data }) => {
-          $mavon.$img2Url(pos, `${data.domain}/${data.name}`);
+        .then(data => {
+          $mavon.$img2Url(pos, data.src);
         })
         .finally(() => {
           loading.close();
@@ -179,41 +174,10 @@ export default {
     },
     // 文章发布
     send() {
-      if (this.articleData.title.trim() === "") {
-        c.msg({
-          type: "error",
-          content: "请填写文章标题！"
-        });
-        return;
-      }
-      if (this.articleData.preface.trim() === "") {
-        c.msg({
-          type: "error",
-          content: "请填写文章前言！"
-        });
-        return;
-      }
-      if (!this.articleData.tag_id) {
-        c.msg({
-          type: "error",
-          content: "请选择文章标签！"
-        });
-        return;
-      }
-      if (this.articleData.markdownHtml.trim() === "") {
-        c.msg({
-          type: "error",
-          content: "请填写文章内容！"
-        });
-        return;
-      }
       // 发布loading图
       const loading = new c.Loading(`正在${this.send_btn_text}，请耐心等待！`);
       addArticle(this.articleData)
-        .then(({ data }) => {
-          c.msg({
-            content: data.msg
-          });
+        .then(() => {
           this.$router.push({ name: "articleList" });
         })
         .finally(() => {
