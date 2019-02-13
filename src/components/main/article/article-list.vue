@@ -54,18 +54,7 @@ export default {
       this.$router.push({ name: "articleEdit", params: { aid } });
     },
     delete_article(aid) {
-      articleDel(aid).then(({ data }) => {
-        if (data.code === 0) {
-          c.msg({
-            content: data.msg
-          });
-        } else {
-          c.msg({
-            type: "error",
-            content: data.msg
-          });
-        }
-      });
+      articleDel(aid);
     }
   }
 };
