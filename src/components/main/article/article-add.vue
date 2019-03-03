@@ -4,14 +4,7 @@
       <div class="cdl-form-wrap">
         <span class="cdl-form-title">文章标题</span>
         <div class="cdl-form-cnt">
-          <input
-            type="text"
-            class="cdl-text"
-            v-focus
-            maxlength="50"
-            placeholder="请输入文章标题"
-            v-model="articleData.title"
-          >
+          <Input v-model="articleData.title" placeholder="请输入文章标题"/>
         </div>
       </div>
     </div>
@@ -19,12 +12,7 @@
       <div class="cdl-form-wrap">
         <span class="cdl-form-title">文章前言</span>
         <div class="cdl-form-cnt">
-          <textarea
-            class="cdl-area"
-            placeholder="请输入文章前言"
-            maxlength="500"
-            v-model="articleData.preface"
-          ></textarea>
+          <Input v-model="articleData.preface" type="textarea" :rows="4" placeholder="请输入文章前言"/>
         </div>
       </div>
     </div>
@@ -38,7 +26,6 @@
           <input
             type="file"
             accept="image/gif, image/jpeg, image/jpg, image/png, image/svg"
-            multiple="multiple"
             id="uploadImg"
             @change="uploadImg"
             :value="fileVal"
@@ -54,9 +41,9 @@
       <div class="cdl-form-wrap">
         <span class="cdl-form-title">文章标签</span>
         <div class="cdl-form-cnt">
-          <select class="cdl-text" v-model="articleData.tag_id">
-            <option v-for="tag in tagList" :key="tag.tid" :value="tag.tid">{{tag.tag_val}}</option>
-          </select>
+          <Select v-model="articleData.tag_id">
+            <Option v-for="item in tagList" :value="item.tid" :key="item.tid">{{ item.tag_val }}</Option>
+          </Select>
         </div>
       </div>
     </div>
@@ -79,7 +66,7 @@
 <script>
 import {
   addArticle,
-  tagList,
+  tagList as tagListReq,
   uploadImg,
   articleContentByAid
 } from "@/server/server";
@@ -93,7 +80,7 @@ export default {
         title: "", // 标题
         preface: "", // 前言
         cover: "", // 文件路径
-        tag_id: "", // 标签
+        tag_id: "Canberra", // 标签
         markdownText: "", // 编辑内容
         markdownHtml: "" // 显示内容
       },
@@ -102,8 +89,8 @@ export default {
   },
   beforeCreate() {
     // 获取文章所有标签
-    tagList().then(data => {
-      this.tagList = data;
+    tagListReq().then(tagList => {
+      this.tagList = tagList;
     });
   },
   created() {
@@ -177,7 +164,8 @@ export default {
       // 发布loading图
       const loading = new c.Loading(`正在${this.send_btn_text}，请耐心等待！`);
       addArticle(this.articleData)
-        .then(() => {
+        .then(data => {
+          console.log(data);
           this.$router.push({ name: "articleList" });
         })
         .finally(() => {
@@ -188,13 +176,11 @@ export default {
 };
 </script>
 <style lang="less">
-#article-add {
-  padding-left: 30px;
-  padding-right: 30px;
-}
 .cdl-form-item {
   position: relative;
-  padding-top: 40px;
+  &:not(:first-child) {
+    padding-top: 40px;
+  }
 }
 #cover {
   display: inline-block;

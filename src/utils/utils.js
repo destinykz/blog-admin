@@ -416,24 +416,6 @@ c.toggleClass = function (el, cls) {
     };
     c.Heart = Heart;
 })();
-// 后端返回日期格式化
-; (function () {
-    c.toZero = function (num) {
-        return num < 10 ? '0' + num : num;
-    };
-    // 增加八个小时
-    c.add_hour8 = function (hour) {
-        const new_hour = parseInt(hour);
-        return c.toZero(new_hour + 8 < 24 ? new_hour + 8 : new_hour - 24);
-    };
-    c.formattedDate = (date = '') => {
-        // 2018-10-12 02:06:06
-        date = date.substr(0, date.length - 5);
-        const hour = date.match(/T(\d+)/)[1];
-        date = date.replace(/T(\d+)/, ' ' + c.add_hour8(hour));
-        return date;
-    }
-})();
 // Vue自定义指令
 ; (function () {
     // 注册一个全局自定义指令 `v-focus`

@@ -1,60 +1,143 @@
 <template>
   <div id="article-list">
-    <div class="article-search clear">
-      <div class="search-box">
-        <div class="cdl-form-wrap">
-          <span class="cdl-form-title">文章搜索</span>
-          <div class="cdl-form-cnt">
-            <input type="text" placeholder="请输入文章相关内容" class="cdl-text" v-focus>
-          </div>
-        </div>
-      </div>
-      <button id="article-search-btn" class="cdl-button medium blue">
-        <i class="fa fa-search"></i> 搜索
-      </button>
-    </div>
-    <cdl-table :data="articleList">
-      <cdl-table-column slot="thead" label="ID"></cdl-table-column>
-      <cdl-table-column slot="thead" label="文章标题"></cdl-table-column>
-      <cdl-table-column slot="thead" label="类型"></cdl-table-column>
-      <cdl-table-column slot="thead" label="发布日期"></cdl-table-column>
-      <cdl-table-column slot="thead" label="操作"></cdl-table-column>
-      <template slot-scope="handle">
-        <button class="cdl-button blue mini" @click="update_article(handle.row.aid)">修改</button>
-        <button class="cdl-button red mini" @click="delete_article(handle.row.aid)">删除</button>
-      </template>
-    </cdl-table>
+    <Table
+      border
+      ref="selection"
+      :columns="columns"
+      :data="articleList"
+      @on-selection-change="selectionChange"
+    ></Table>
+    <Button type="error" @click="delArticle(aids)" style="margin: 10px 0;">批量删除</Button>
+    <Page
+      :total="total"
+      :page-size="pageSize"
+      show-total
+      @on-change="pageChange"
+      style="text-align: center;"
+    />
   </div>
 </template>
 
 <script>
-import cdlTable from "../../table/table";
-import cdlTableColumn from "../../table/table-column";
 import { articleList as articleListReq, articleDel } from "@/server/server";
 export default {
-  components: {
-    cdlTable,
-    cdlTableColumn
-  },
-  beforeCreate() {
-    articleListReq().then(data => {
-      data.map(article_item => {
-        article_item.date = c.formattedDate(article_item.date);
-      });
-      this.articleList = data;
-    });
+  created() {
+    this.loadArticleList(1);
   },
   data() {
     return {
-      articleList: []
+      aids: [],
+      columns: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
+        {
+          type: "index",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "ID",
+          key: "aid"
+        },
+        {
+          title: "标题",
+          key: "title"
+        },
+        {
+          title: "日期",
+          key: "date"
+        },
+        {
+          title: "标签",
+          key: "tag_name"
+        },
+        {
+          title: "操作",
+          width: 150,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.update_article(params.row.aid);
+                    }
+                  }
+                },
+                "查看"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.delArticle([params.row.aid]);
+                    }
+                  }
+                },
+                "删除"
+              )
+            ]);
+          }
+        }
+      ],
+      articleList: [],
+      total: 0,
+      pageSize: 0
     };
   },
   methods: {
+    // 修改文章
     update_article(aid) {
       this.$router.push({ name: "articleEdit", params: { aid } });
     },
-    delete_article(aid) {
-      articleDel(aid);
+    // 文章分页
+    pageChange(page) {
+      this.loadArticleList(page);
+    },
+    // 加载文章
+    loadArticleList(page) {
+      articleListReq({ page }).then(data => {
+        this.articleList = data.articleList;
+        this.total = data.total;
+        this.pageSize = data.pageSize;
+      });
+    },
+    // 删除文章
+    delArticle(aids) {
+      this.$Modal.confirm({
+        title: "删除确认",
+        content: "<p>您确认删除文章吗？</p>",
+        onOk: () => {
+          articleDel({ aids }).then(data => {
+            window.location.reload();
+          });
+        },
+        onCancel: () => {}
+      });
+    },
+    // 文章勾选
+    selectionChange(selection) {
+      this.aids.length = 0;
+      selection.forEach(article => {
+        this.aids.push(article.aid);
+      });
     }
   }
 };

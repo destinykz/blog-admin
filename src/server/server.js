@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from "@/router/router";
 const http = axios.create({
-    baseURL: 'http://192.168.1.34:8080/admin',
+    baseURL: 'http://192.168.1.34:7070/admin',
     responseType: 'json'
 });
 // 请求拦截器
@@ -11,22 +11,17 @@ http.interceptors.request.use(function (config) {
 });
 // 响应拦截器
 http.interceptors.response.use(function (resData) {
-    var d = resData.data.d;
+    var data = resData.data.d;
     if (resData.status === 200 && resData.data.c === 0) {
-        if (d && d.token) {
-            window.localStorage.setItem('username', d.username);
-            window.localStorage.setItem('token', d.token);
+        if (data && data.token) {
+            window.localStorage.setItem('username', data.username);
+            window.localStorage.setItem('token', data.token);
         }
-        if (resData.data.m) c.msg({
-            type: 'success',
-            content: resData.data.m
-        });
-        return d || [];
+        if (resData.data.m) c.$Message.success(resData.data.m);
+        return data;
     } else {
-        c.msg({
-            type: 'error',
-            content: resData.data.m
-        });
+        c.$Message.error(resData.data.m);
+        return resData.data;
     }
 }, function (e) {
     // 响应错误直接到登录界面
@@ -49,16 +44,16 @@ export const addArticle = articleData => {
     return http.post('/article/articleAdd', { articleData });
 }
 // 获取文章列表
-export const articleList = articleData => {
-    return http.post('/article/articleList', { articleData });
+export const articleList = reqData => {
+    return http.post('/article/articleList', reqData);
 }
 // 通过aid请求文章内容
 export const articleContentByAid = aid => {
     return http.post('/article/articleContentByAid', { aid });
 }
 // 删除文章
-export const articleDel = aid => {
-    return http.post('/article/articleDel', { aid });
+export const articleDel = aids => {
+    return http.post('/article/articleDel', aids);
 }
 // markdown 上传图片
 export const uploadImg = formdata => {
