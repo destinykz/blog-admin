@@ -121,6 +121,10 @@ export default {
     },
     // 删除文章
     delArticle(aids) {
+      if (!aids || !aids.length) {
+        this.$Message.warning("请选择需要删除的文章");
+        return;
+      }
       this.$Modal.confirm({
         title: "删除确认",
         content: "<p>您确认删除文章吗？</p>",

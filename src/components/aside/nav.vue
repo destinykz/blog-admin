@@ -46,23 +46,11 @@
           :class="{'act': index === 2}"
           @click="navSlide"
         >
-          <i class="nav-icon fa fa-cubes"></i>
-          <span class="nav-text">分类管理</span>
+          <i class="nav-icon fa fa-tags"></i>
+          <span class="nav-text">标签管理</span>
           <i class="nav-dir-icon fa fa-angle-down"></i>
         </a>
         <ul class="sub-nav">
-          <router-link
-            class="nav-item nav-sub-item"
-            to="/admin/classificationList"
-            tag="li"
-            @click.native="navClick($event, 2)"
-            active-class="act"
-          >
-            <a href="javascript:;" class="nav-inner nav-sub-inner">
-              <i class="fa fa-angle-double-right"></i>
-              <span class="nav-text">分类列表</span>
-            </a>
-          </router-link>
           <router-link
             class="nav-item nav-sub-item"
             to="/admin/classificationAdd"
@@ -72,7 +60,19 @@
           >
             <a href="javascript:;" class="nav-inner nav-sub-inner">
               <i class="fa fa-angle-double-right"></i>
-              <span class="nav-text">分类添加</span>
+              <span class="nav-text">标签添加</span>
+            </a>
+          </router-link>
+          <router-link
+            class="nav-item nav-sub-item"
+            to="/admin/classificationList"
+            tag="li"
+            @click.native="navClick($event, 2)"
+            active-class="act"
+          >
+            <a href="javascript:;" class="nav-inner nav-sub-inner">
+              <i class="fa fa-angle-double-right"></i>
+              <span class="nav-text">标签列表</span>
             </a>
           </router-link>
         </ul>

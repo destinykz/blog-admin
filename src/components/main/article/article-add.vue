@@ -42,7 +42,7 @@
         <span class="cdl-form-title">文章标签</span>
         <div class="cdl-form-cnt">
           <Select v-model="articleData.tag_id">
-            <Option v-for="item in tagList" :value="item.tid" :key="item.tid">{{ item.tag_val }}</Option>
+            <Option v-for="item in tagList" :value="item.tid" :key="item.tid">{{ item.tag_name }}</Option>
           </Select>
         </div>
       </div>
@@ -165,7 +165,6 @@ export default {
       const loading = new c.Loading(`正在${this.send_btn_text}，请耐心等待！`);
       addArticle(this.articleData)
         .then(data => {
-          console.log(data);
           this.$router.push({ name: "articleList" });
         })
         .finally(() => {
@@ -176,28 +175,6 @@ export default {
 };
 </script>
 <style lang="less">
-.cdl-form-item {
-  position: relative;
-  &:not(:first-child) {
-    padding-top: 40px;
-  }
-}
-#cover {
-  display: inline-block;
-  position: relative;
-  margin-top: 30px;
-}
-#cover img {
-  display: block;
-  width: 200px;
-}
-#cover .uploadImgClose {
-  position: absolute;
-  font-size: 20px;
-  right: -18px;
-  top: -18px;
-  color: @color;
-}
 .markdown-body img {
   width: 300px !important;
 }
