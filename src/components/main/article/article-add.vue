@@ -80,7 +80,7 @@ export default {
         title: "", // 标题
         preface: "", // 前言
         cover: "", // 文件路径
-        tag_id: "Canberra", // 标签
+        tag_id: "", // 标签
         markdownText: "", // 编辑内容
         markdownHtml: "" // 显示内容
       },

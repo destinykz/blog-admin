@@ -63,12 +63,10 @@ export const uploadImg = formdata => {
 export const tagList = () => {
     return http.post('/tag/getTagList');
 }
-
 // 标签图片上传
 export const uploadTagImg = formdata => {
     return http.post('/tag/uploadTagImg', formdata);
 }
-
 // 标签添加
 export const addTag = reqData => {
     return http.post('/tag/tagAdd', reqData);
