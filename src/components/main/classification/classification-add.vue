@@ -37,7 +37,7 @@
   </div>
 </template>
 <script>
-import { uploadTagImg, addTag } from "@/server/server";
+import { uploadTagImg, addTag, getTagByTid } from "@/server/server";
 export default {
   data() {
     return {
@@ -57,7 +57,7 @@ export default {
 
       uploadTagImg(formdata)
         .then(data => {
-          this.tagImgSrc = data.src;
+          this.tagImgSrc = data.d.src;
         })
         .finally(() => {
           loading.close();
@@ -72,9 +72,22 @@ export default {
     send() {
       addTag({ tagName: this.tagName, tagImgSrc: this.tagImgSrc }).then(
         data => {
-          this.$router.push({ name: "classificationList" });
+          console.log(data);
+          if (data.c === 0) this.$router.push({ name: "classificationList" });
         }
       );
+    }
+  },
+  created() {
+    // 如果为更改状态，获取tid
+    const { tid } = this.$route.params;
+    if (tid) {
+      // 通过aid请求文章内容
+      articleContentByAid(aid).then(({ d: articleInfo }) => {
+        for (const key in articleInfo) {
+          this.articleData[key] = articleInfo[key];
+        }
+      });
     }
   }
 };

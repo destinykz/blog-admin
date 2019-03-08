@@ -89,8 +89,9 @@ export default {
   },
   beforeCreate() {
     // 获取文章所有标签
-    tagListReq().then(tagList => {
-      this.tagList = tagList;
+    tagListReq().then(data => {
+      console.log(data);
+      // this.tagList = tagList;
     });
   },
   created() {
@@ -100,10 +101,9 @@ export default {
     if (aid) {
       this.send_btn_text = "修改";
       // 通过aid请求文章内容
-      articleContentByAid(aid).then(data => {
-        const articleData = this.articleData;
-        for (const key in articleData) {
-          articleData[key] = data[key];
+      articleContentByAid(aid).then(({ d: articleInfo }) => {
+        for (const key in articleInfo) {
+          this.articleData[key] = articleInfo[key];
         }
       });
     }
@@ -126,7 +126,7 @@ export default {
       formdata.append("image", file);
 
       uploadImg(formdata)
-        .then(data => {
+        .then(({ d: data }) => {
           this.articleData.cover = data.src;
         })
         .finally(() => {

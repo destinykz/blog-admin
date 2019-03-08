@@ -113,7 +113,8 @@ export default {
     },
     // 加载文章
     loadArticleList(page) {
-      articleListReq({ page }).then(data => {
+      articleListReq({ page }).then(({ d: data }) => {
+        console.log(data);
         this.articleList = data.articleList;
         this.total = data.total;
         this.pageSize = data.pageSize;
@@ -130,7 +131,7 @@ export default {
         content: "<p>您确认删除文章吗？</p>",
         onOk: () => {
           articleDel({ aids }).then(data => {
-            window.location.reload();
+            if (data.c === 0) window.location.reload();
           });
         },
         onCancel: () => {}

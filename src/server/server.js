@@ -11,17 +11,17 @@ http.interceptors.request.use(function (config) {
 });
 // 响应拦截器
 http.interceptors.response.use(function (resData) {
-    var data = resData.data.d;
-    if (resData.status === 200 && resData.data.c === 0) {
-        if (data && data.token) {
-            window.localStorage.setItem('username', data.username);
-            window.localStorage.setItem('token', data.token);
+    var data = resData.data;
+    if (resData.status === 200 && data.c === 0) {
+        if (data.d && data.d.token && data.d.username) {
+            window.localStorage.setItem('username', data.d.username);
+            window.localStorage.setItem('token', data.d.token);
         }
-        if (resData.data.m) c.$Message.success(resData.data.m);
+        if (data.m) c.$Message.success(data.m);
         return data;
     } else {
-        c.$Message.error(resData.data.m);
-        return resData.data;
+        c.$Message.error(data.m);
+        return data;
     }
 }, function (e) {
     // 响应错误直接到登录界面
@@ -63,6 +63,10 @@ export const uploadImg = formdata => {
 export const tagList = () => {
     return http.post('/tag/getTagList');
 }
+// 删除标签
+export const tagDel = tids => {
+    return http.post('/tag/delTag', tids);
+}
 // 标签图片上传
 export const uploadTagImg = formdata => {
     return http.post('/tag/uploadTagImg', formdata);
@@ -70,4 +74,8 @@ export const uploadTagImg = formdata => {
 // 标签添加
 export const addTag = reqData => {
     return http.post('/tag/tagAdd', reqData);
+}
+// 获取单个标签信息
+export const getTagByTid = tid => {
+    return http.post('/tag/getTagByTid', { tid });
 }

@@ -183,7 +183,6 @@ export default {
 }
 .sub-nav {
   background-color: lighten(@bg, 2%);
-  display: none;
 }
 .nav-sub-item {
   transition: 0.15s;
