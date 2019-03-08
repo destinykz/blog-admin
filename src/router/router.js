@@ -56,6 +56,12 @@ const router = new Router({
                     component: classificationList
                 },
                 {
+                    path: 'classificationEdit/:tid',
+                    alias: '',
+                    name: 'classificationEdit',
+                    component: classificationAdd
+                },
+                {
                     path: 'classificationAdd',
                     name: 'classificationAdd',
                     component: classificationAdd

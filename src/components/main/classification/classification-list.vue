@@ -81,7 +81,7 @@ export default {
   methods: {
     // 修改标签
     update_tag(tid) {
-      this.$router.push({ name: "classificationAdd", params: { tid } });
+      this.$router.push({ name: "classificationEdit", params: { tid } });
     },
     // 加载标签表格
     loadTag() {

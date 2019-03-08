@@ -83,10 +83,9 @@ export default {
     const { tid } = this.$route.params;
     if (tid) {
       // 通过aid请求文章内容
-      articleContentByAid(aid).then(({ d: articleInfo }) => {
-        for (const key in articleInfo) {
-          this.articleData[key] = articleInfo[key];
-        }
+      getTagByTid(tid).then(({ d }) => {
+        this.tagName = d.tagInfo.tag_name;
+        this.tagImgSrc = d.tagImgSrc;
       });
     }
   }
