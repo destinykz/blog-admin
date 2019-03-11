@@ -68,15 +68,19 @@ export default {
   },
   methods: {
     login() {
-      // loading
-      const loading = new c.Loading("正在登录，请耐心等待！");
+      let loading = null;
+      let timer = setTimeout(() => {
+        // loading
+        loading = new c.Loading("正在登录，请耐心等待！");
+      }, 100);
       // 调用登录方法
       login(this.username, this.password)
         .then(data => {
-          this.$router.push({ name: "articleAdd" });
+          if (data.c === 0) this.$router.push({ name: "articleAdd" });
         })
         .finally(() => {
-          loading.close();
+          clearTimeout(timer);
+          loading && loading.close();
         });
     }
   }
