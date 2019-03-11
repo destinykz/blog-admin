@@ -12,6 +12,8 @@ import articleAdd from '@/components/main/article/article-add'
 import classificationList from '@/components/main/classification/classification-list'
 // 分类添加
 import classificationAdd from '@/components/main/classification/classification-add'
+// 分类修改
+import classificationUpd from '@/components/main/classification/classification-upd'
 // 用户列表
 import userList from '@/components/main/user/user-list'
 // 评论列表
@@ -56,10 +58,10 @@ const router = new Router({
                     component: classificationList
                 },
                 {
-                    path: 'classificationEdit/:tid',
+                    path: 'classificationUpd/:tid',
                     alias: '',
-                    name: 'classificationEdit',
-                    component: classificationAdd
+                    name: 'classificationUpd',
+                    component: classificationUpd
                 },
                 {
                     path: 'classificationAdd',

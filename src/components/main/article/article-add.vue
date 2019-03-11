@@ -89,9 +89,8 @@ export default {
   },
   beforeCreate() {
     // 获取文章所有标签
-    tagListReq().then(data => {
-      console.log(data);
-      // this.tagList = tagList;
+    tagListReq().then(({ d: tagList }) => {
+      this.tagList = tagList;
     });
   },
   created() {

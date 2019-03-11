@@ -4,7 +4,7 @@
       <div class="cdl-form-wrap">
         <span class="cdl-form-title">标签名称</span>
         <div class="cdl-form-cnt">
-          <Input v-model="tagName" placeholder="请输入标签名称"/>
+          <Input v-model="newTagName" placeholder="请输入标签名称"/>
         </div>
       </div>
     </div>
@@ -24,26 +24,29 @@
           >
         </div>
       </div>
-      <div id="cover" v-show="tagImgSrc">
+      <div id="cover" v-show="newTagImgSrc">
         <i class="uploadImgClose cdl-close fa fa-close" title="移除这张图片" @click="closeUploadImg"></i>
-        <img :src="tagImgSrc" alt="主图">
+        <img :src="newTagImgSrc" alt="主图">
       </div>
     </div>
     <div class="cdl-form-item">
       <div class="cdl-form-wrap">
-        <button type="button" class="cdl-button blue" @click="send">创建</button>
+        <button type="button" class="cdl-button blue" @click="send">修改</button>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { uploadTagImg, addTag, getTagByTid } from "@/server/server";
+import { uploadTagImg, updTag, getTagByTid } from "@/server/server";
 export default {
   data() {
     return {
-      tagName: "",
+      tid: "",
+      oldTagName: "",
+      newTagName: "",
       tagImg: "",
-      tagImgSrc: ""
+      newTagImgSrc: "",
+      oldTagImgSrc: ""
     };
   },
   methods: {
@@ -57,27 +60,44 @@ export default {
 
       uploadTagImg(formdata)
         .then(data => {
-          this.tagImgSrc = data.d.src;
+          this.newTagImgSrc = data.d.src;
         })
         .finally(() => {
           loading.close();
         });
     },
     closeUploadImg() {
-      this.tagImgSrc = "";
+      this.newTagImgSrc = "";
       // 清空input file的值
       this.tagImg = "";
     },
     // 创建标签
     send() {
-      addTag({ tagName: this.tagName, tagImgSrc: this.tagImgSrc }).then(
-        data => {
-          if (data.c === 0) this.$router.push({ name: "classificationList" });
-        }
-      );
+      updTag({
+        tid: this.tid,
+        oldTagName: this.oldTagName,
+        newTagName: this.newTagName,
+        newTagImgSrc: this.newTagImgSrc,
+        oldTagImgSrc: this.oldTagImgSrc
+      }).then(data => {
+        if (data.c === 0) this.$router.push({ name: "classificationList" });
+      });
+    }
+  },
+  created() {
+    // 如果为更改状态，获取tid
+    const { tid } = this.$route.params;
+    if (tid) {
+      // 通过aid请求文章内容
+      getTagByTid(tid).then(({ d }) => {
+        this.tid = d.tagInfo.tid;
+        this.oldTagName = d.tagInfo.tag_name;
+        this.newTagName = d.tagInfo.tag_name;
+        this.newTagImgSrc = d.tagImgSrc;
+        this.oldTagImgSrc = d.tagImgSrc;
+      });
     }
   }
 };
 </script>
 <style lang="less">
-</style>

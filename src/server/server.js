@@ -75,6 +75,10 @@ export const uploadTagImg = formdata => {
 export const addTag = reqData => {
     return http.post('/tag/tagAdd', reqData);
 }
+// 标签修改
+export const updTag = reqData => {
+    return http.post('/tag/tagUpd', reqData);
+}
 // 获取单个标签信息
 export const getTagByTid = tid => {
     return http.post('/tag/getTagByTid', { tid });
