@@ -12,22 +12,13 @@ http.interceptors.request.use(function (config) {
 // 响应拦截器
 http.interceptors.response.use(function (resData) {
     var data = resData.data;
-    if (resData.status === 200 && data.c === 0) {
-        if (data.d && data.d.token && data.d.username) {
-            window.localStorage.setItem('username', data.d.username);
-            window.localStorage.setItem('token', data.d.token);
-        }
-        if (data.m) c.$Message.success(data.m);
-        return data;
-    } else {
-        c.$Message.error(data.m);
-        return data;
-    }
+    if (data.m) c.$Message.success(data.m);
+    return data;
 }, function (e) {
     // 响应错误直接到登录界面
+    c.$Message.error('登录超时！');
     router.push({ name: 'login' });
 });
-
 // 检查是否登陆
 export const checkLogin = () => {
     return http.post('/user/checkLogin');

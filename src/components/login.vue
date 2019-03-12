@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { login } from "@/server/server";
+import { login as loginReq } from "@/server/server";
 export default {
   data() {
     return {
@@ -74,9 +74,13 @@ export default {
         loading = new c.Loading("正在登录，请耐心等待！");
       }, 100);
       // 调用登录方法
-      login(this.username, this.password)
+      loginReq(this.username, this.password)
         .then(data => {
-          if (data.c === 0) this.$router.push({ name: "articleAdd" });
+          if (data.c === 0) {
+            window.localStorage.setItem("username", data.d.username);
+            window.localStorage.setItem("token", data.d.token);
+            this.$router.push({ name: "articleAdd" });
+          }
         })
         .finally(() => {
           clearTimeout(timer);
