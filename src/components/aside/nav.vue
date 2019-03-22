@@ -10,7 +10,7 @@
         >
           <i class="nav-icon fa fa-book"></i>
           <span class="nav-text">文章管理</span>
-          <i class="nav-dir-icon fa fa-angle-down"></i>
+          <i class="nav-dir-icon fa fa-angle-up"></i>
         </a>
         <ul class="sub-nav">
           <router-link
@@ -48,7 +48,7 @@
         >
           <i class="nav-icon fa fa-tags"></i>
           <span class="nav-text">标签管理</span>
-          <i class="nav-dir-icon fa fa-angle-down"></i>
+          <i class="nav-dir-icon fa fa-angle-up"></i>
         </a>
         <ul class="sub-nav">
           <router-link

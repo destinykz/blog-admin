@@ -12,7 +12,7 @@ http.interceptors.request.use(function (config) {
 // 响应拦截器
 http.interceptors.response.use(function (resData) {
     var data = resData.data;
-    if (data.m) c.$Message.success(data.m);
+    if (data.c) c.$Message.error(data.m);
     return data;
 }, function (e) {
     // 响应错误直接到登录界面
