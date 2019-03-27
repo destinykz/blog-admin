@@ -164,7 +164,7 @@ export default {
       const loading = new c.Loading(`正在${this.send_btn_text}，请耐心等待！`);
       addArticle(this.articleData)
         .then(data => {
-          this.$router.push({ name: "articleList" });
+          if (data.c === 0) this.$router.push({ name: "articleList" });
         })
         .finally(() => {
           loading.close();
