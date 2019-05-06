@@ -16,12 +16,17 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 Vue.use(mavonEditor)
 
-import { Button, Input, Select, Option, Table, Modal, Icon, Message, Page } from 'iview'
+import { Menu, Submenu, MenuGroup, MenuItem, Button, Input, Select, Option, Table, Modal, Icon, Message, Page } from 'iview'
+Vue.component('Menu', Menu);
+Vue.component('Submenu', Submenu);
+Vue.component('MenuGroup', MenuGroup);
+Vue.component('MenuItem', MenuItem);
 Vue.component('Button', Button);
 Vue.component('Input', Input);
 Vue.component('Select', Select);
 Vue.component('Option', Option);
 Vue.component('Table', Table);
+Vue.component('Modal', Modal);
 Vue.component('Icon', Icon);
 Vue.component('Page', Page);
 Vue.prototype.$Message = Message;

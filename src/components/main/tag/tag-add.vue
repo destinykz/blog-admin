@@ -31,7 +31,13 @@
     </div>
     <div class="cdl-form-item">
       <div class="cdl-form-wrap">
-        <button type="button" class="cdl-button blue" @click="send">创建</button>
+        <Button
+          type="primary"
+          :size="'large'"
+          @click="send"
+          :disabled="btnLoading"
+          :loading="btnLoading"
+        >创建</Button>
       </div>
     </div>
   </div>
@@ -43,7 +49,8 @@ export default {
     return {
       tagName: "",
       tagImg: "",
-      tagImgSrc: ""
+      tagImgSrc: "",
+      btnLoading: false
     };
   },
   methods: {
@@ -70,11 +77,14 @@ export default {
     },
     // 创建标签
     send() {
-      addTag({ tagName: this.tagName, tagImgSrc: this.tagImgSrc }).then(
-        data => {
-          if (data.c === 0) this.$router.push({ name: "classificationList" });
-        }
-      );
+      this.btnLoading = true;
+      addTag({ tagName: this.tagName, tagImgSrc: this.tagImgSrc })
+        .then(data => {
+          if (data.c === 0) this.$router.push({ path: "tagList" });
+        })
+        .finally(() => {
+          this.btnLoading = false;
+        });
     }
   }
 };

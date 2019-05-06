@@ -45,22 +45,20 @@ export default {
   display: inline-block;
   width: @asideW;
   height: 100%;
-  background-color: @bg;
 }
 #main {
   position: absolute;
   left: @asideW;
   top: 0;
-  right: 10px;
+  right: 0;
   bottom: 0;
   box-sizing: border-box;
   border: 1px solid darken(@bg, 10%);
   border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
   background-color: #fff;
   overflow: hidden;
   overflow-y: auto;
-  padding: 30px;
+  padding: 15px;
 }
 .slide-enter-active,
 .slide-leave-active {

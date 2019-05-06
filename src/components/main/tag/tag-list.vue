@@ -1,25 +1,19 @@
 <template>
-  <div id="tag-list">
-    <Table
-      border
-      ref="selection"
-      :columns="columns"
-      :data="tagList"
-      @on-selection-change="selectionChange"
-    ></Table>
-    <Button type="error" @click="delTag(tids)" style="margin: 10px 0;">批量删除</Button>
-  </div>
+  <c-list :primaryID="'tid'" :columns="columns" :list="tagList" @delItem="delTag"></c-list>
 </template>
 
 <script>
+import cList from "@/components/c-list";
 import { tagList as tagListReq, tagDel } from "@/server/server";
 export default {
+  components: {
+    cList
+  },
   created() {
     this.loadTag();
   },
   data() {
     return {
-      tids: [],
       columns: [
         {
           type: "selection",
@@ -50,7 +44,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.update_tag(params.row.tid);
+                      this.tagDetail(params.row.tid);
                     }
                   }
                 },
@@ -80,8 +74,8 @@ export default {
   },
   methods: {
     // 修改标签
-    update_tag(tid) {
-      this.$router.push({ name: "classificationUpd", params: { tid } });
+    tagDetail(tid) {
+      this.$router.push({ name: "tagUpd", params: { tid } });
     },
     // 加载标签表格
     loadTag() {
@@ -95,22 +89,8 @@ export default {
         this.$Message.warning("请选择需要删除的标签");
         return;
       }
-      this.$Modal.confirm({
-        title: "删除确认",
-        content: "<p>您确认删除标签吗？</p>",
-        onOk: () => {
-          tagDel({ tids }).then(() => {
-            window.location.reload();
-          });
-        },
-        onCancel: () => {}
-      });
-    },
-    // 文章勾选
-    selectionChange(selection) {
-      this.tids.length = 0;
-      selection.forEach(tag => {
-        this.tids.push(tag.tid);
+      tagDel(tids).then(data => {
+        if (data.c === 0) this.loadTag();
       });
     }
   }

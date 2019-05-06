@@ -1,6 +1,6 @@
 <template>
   <nav id="nav-box">
-    <ul class="nav-list">
+    <!-- <ul class="nav-list">
       <li class="nav-item nav-main-item">
         <a
           href="javascript:;"
@@ -53,7 +53,7 @@
         <ul class="sub-nav">
           <router-link
             class="nav-item nav-sub-item"
-            to="/admin/classificationAdd"
+            to="/admin/tagAdd"
             tag="li"
             @click.native="navClick($event, 2)"
             active-class="act"
@@ -65,7 +65,7 @@
           </router-link>
           <router-link
             class="nav-item nav-sub-item"
-            to="/admin/classificationList"
+            to="/admin/tagList"
             tag="li"
             @click.native="navClick($event, 2)"
             active-class="act"
@@ -89,7 +89,7 @@
           <i class="fa nav-icon fa-user-circle"></i>
           <span class="nav-text">用户列表</span>
         </a>
-      </router-link>
+      </router-link> 
       <router-link
         class="nav-item nav-main-item"
         to="/admin/commentList"
@@ -103,103 +103,46 @@
           <span class="nav-text">评论列表</span>
         </a>
       </router-link>
-    </ul>
+    </ul>-->
+    <Menu style="width: 100%;" :active-name="activeName" :open-names="openNames">
+      <Submenu name="article">
+        <template slot="title">
+          <Icon type="ios-book"/>文章管理
+        </template>
+        <MenuItem name="articleAdd" to="/admin/articleAdd">新增文章</MenuItem>
+        <MenuItem name="articleList" to="/admin/articleList">文章列表</MenuItem>
+        <MenuItem name="articleDraft" to="/admin/articleDraft">草稿箱</MenuItem>
+      </Submenu>
+      <Submenu name="tag">
+        <template slot="title">
+          <Icon type="ios-pricetag"/>标签管理
+        </template>
+        <MenuItem name="tagAdd" to="/admin/tagAdd">新增标签</MenuItem>
+        <MenuItem name="tagList" to="/admin/tagList">标签列表</MenuItem>
+      </Submenu>
+      <MenuItem name="commentList" to="/admin/commentList">
+        <Icon type="ios-people"/>评论列表
+      </MenuItem>
+    </Menu>
   </nav>
 </template>
 
 <script>
 export default {
+  created() {},
   data() {
     return {
-      index: 0
+      activeName: "",
+      openNames: []
     };
   },
-  methods: {
-    navSlide(e) {
-      const target = c.parent(e.target, "nav-main-item");
-      const subNav = target.getElementsByClassName("sub-nav")[0];
-      if (subNav) {
-        c.slideToggle(subNav, 100);
-        c.toggleClass(target, "nav-rotate");
-      }
-    },
-    navClick(e, index) {
-      e.stopPropagation();
-      this.index = index;
-    }
-  },
-  mounted() {
-    const mainNav = document.getElementsByClassName("nav-main-item");
-    const subNav = document.getElementsByClassName("sub-nav");
-    c.toggleClass(mainNav[this.index], "nav-rotate");
-    c.slideToggle(subNav[this.index], 100);
+  created() {
+    const componentsNameArr = this.$route.name.split("/");
+    this.openNames.push(componentsNameArr[0]);
+    this.activeName = componentsNameArr[1];
   }
 };
 </script>
-
-<style lang="less">
-#nav-box {
-  padding-top: 20px;
-}
-.nav-item {
-  box-sizing: border-box;
-  color: @color;
-  font-size: 14px;
-  transition: background-color 0.2s;
-}
-.nav-inner {
-  display: inline-block;
-  position: relative;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  padding: 15px;
-  color: @color;
-}
-.nav-main-inner:hover,
-.nav-main-inner.act {
-  background-color: @blue;
-  color: #fff;
-}
-.nav-main-inner span {
-  font-weight: normal;
-}
-.nav-icon {
-  display: inline-block;
-  width: 16px;
-  text-align: center;
-}
-.nav-dir-icon {
-  position: absolute;
-  right: 16px;
-  top: 18px;
-  transition: 0.15s;
-}
-.nav-main-item.nav-rotate .nav-dir-icon {
-  transform: rotate(180deg);
-}
-.nav-text {
-  padding-left: 10px;
-}
-.sub-nav {
-  background-color: lighten(@bg, 2%);
-}
-.nav-sub-item {
-  transition: 0.15s;
-  padding-left: 10px;
-}
-.nav-sub-item:hover {
-  color: @blue;
-  transform: translateX(5px);
-}
-.nav-sub-item:hover,
-.nav-sub-item.act {
-  .nav-inner {
-    color: @blue;
-  }
-}
-</style>
-
 
 
 

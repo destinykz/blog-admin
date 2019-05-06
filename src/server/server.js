@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from "@/router/router";
 const http = axios.create({
-    baseURL: 'http://192.168.1.35:7070/admin',
+    baseURL: 'http://localhost:7070/admin',
     responseType: 'json'
 });
 // 请求拦截器
@@ -13,6 +13,7 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (resData) {
     var data = resData.data;
     if (data.c) c.$Message.error(data.m);
+    else if (data.m) c.$Message.success(data.m);
     return data;
 }, function (e) {
     // 响应错误直接到登录界面
@@ -34,17 +35,29 @@ export const login = (username, password) => {
 export const addArticle = articleData => {
     return http.post('/article/articleAdd', { articleData });
 }
+// 添加文章
+export const editArticle = articleData => {
+    return http.post('/article/articleEdit', { articleData });
+}
+// 文章草稿
+export const articleDraft = articleData => {
+    return http.post('/article/articleDraft', { articleData });
+}
 // 获取文章列表
-export const articleList = reqData => {
-    return http.post('/article/articleList', reqData);
+export const articleList = (page, state) => {
+    return http.get(`/article/articleList?page=${page}&state=${state}`);
 }
 // 通过aid请求文章内容
 export const articleContentByAid = aid => {
     return http.post('/article/articleContentByAid', { aid });
 }
+// 搜索文章
+export const getArticleBySearch = (searchValue = '', page = 1, state) => {
+    return http.get(`/article/getArticleBySearch?searchValue=${searchValue}&page=${page}&state=${state}`);
+}
 // 删除文章
 export const articleDel = aids => {
-    return http.post('/article/articleDel', aids);
+    return http.post('/article/articleDel', { aids });
 }
 // markdown 上传图片
 export const uploadImg = formdata => {
@@ -56,7 +69,7 @@ export const tagList = () => {
 }
 // 删除标签
 export const tagDel = tids => {
-    return http.post('/tag/delTag', tids);
+    return http.post('/tag/delTag', { tids });
 }
 // 标签图片上传
 export const uploadTagImg = formdata => {
@@ -73,4 +86,28 @@ export const updTag = reqData => {
 // 获取单个标签信息
 export const getTagByTid = tid => {
     return http.post('/tag/getTagByTid', { tid });
+}
+// 评论列表
+export const getCommentList = page => {
+    return http.get(`/comment/getCommentList?page=${page}`);
+}
+// 评论总数
+export const getCommentCount = () => {
+    return http.get('/comment/getCommentCount');
+}
+// 评论删除
+export const commentDel = cids => {
+    return http.post('/comment/commentDel', { cids });
+}
+// 回复列表
+export const getReplyList = (cid, page) => {
+    return http.get(`/comment/getReplyList?cid=${cid}&page=${page}`);
+}
+// 回复总数
+export const getReplyCount = cid => {
+    return http.get(`/comment/getReplyCount?cid=${cid}`);
+}
+// 回复删除
+export const ReplyDel = rids => {
+    return http.post('/comment/ReplyDel', { rids });
 }

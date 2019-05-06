@@ -58,7 +58,8 @@
     </div>
     <div class="cdl-form-item">
       <div class="cdl-form-wrap">
-        <button type="button" class="cdl-button blue" @click="send">{{send_btn_text}}</button>
+        <Button type="primary" :size="'large'" @click="send" style="margin-right: 20px;">发布</Button>
+        <Button type="warning" :size="'large'" @click="draft">存为草稿</Button>
       </div>
     </div>
   </div>
@@ -66,6 +67,7 @@
 <script>
 import {
   addArticle,
+  articleDraft,
   tagList as tagListReq,
   uploadImg,
   articleContentByAid
@@ -76,36 +78,25 @@ export default {
       fileVal: "", // input[type="file"] 的值
       tagList: [], // 文章标签值
       articleData: {
-        aid: "",
         title: "", // 标题
         preface: "", // 前言
         cover: "", // 文件路径
         tag_id: "", // 标签
         markdownText: "", // 编辑内容
-        markdownHtml: "" // 显示内容
-      },
-      send_btn_text: "发布"
+        markdownHtml: "", // 显示内容
+        state: 1,
+      }
     };
   },
-  beforeCreate() {
-    // 获取文章所有标签
+  created() {
+    // 获取标签列表
+    const aid = this.$route.params.aid;
     tagListReq().then(({ d: tagList }) => {
       this.tagList = tagList;
+      this.articleData.tag_id = tagList[0].tid;
     });
-  },
-  created() {
     // 如果为更改状态，获取aid
-    const aid = this.$route.params.aid;
     this.articleData.aid = aid;
-    if (aid) {
-      this.send_btn_text = "修改";
-      // 通过aid请求文章内容
-      articleContentByAid(aid).then(({ d: articleInfo }) => {
-        for (const key in articleInfo) {
-          this.articleData[key] = articleInfo[key];
-        }
-      });
-    }
   },
   watch: {
     $route(to, from) {
@@ -161,10 +152,23 @@ export default {
     // 文章发布
     send() {
       // 发布loading图
-      const loading = new c.Loading(`正在${this.send_btn_text}，请耐心等待！`);
+      const loading = new c.Loading(`正在发布，请耐心等待！`);
       addArticle(this.articleData)
         .then(data => {
-          if (data.c === 0) this.$router.push({ name: "articleList" });
+          if (data.c === 0) this.$router.push({ path: "articleList" });
+        })
+        .finally(() => {
+          loading.close();
+        });
+    },
+    // 存为草稿
+    draft() {
+      // 发布loading图
+      const loading = new c.Loading(`正在存储，请耐心等待！`);
+      this.articleData.state = 0;
+      articleDraft(this.articleData)
+        .then(data => {
+          if (data.c === 0) this.$router.push({ path: "articleDraft" });
         })
         .finally(() => {
           loading.close();
@@ -174,7 +178,7 @@ export default {
 };
 </script>
 <style lang="less">
-.markdown-body img {
-  width: 300px !important;
-}
+  .markdown-body img {
+    width: 300px !important;
+  }
 </style>

@@ -5,15 +5,19 @@ import login from '@/components/login'
 // 登录
 import admin from '@/components/admin'
 // 文章列表
-import articleList from '@/components/main/article/article-list'
+import articleMainList from '@/components/main/article/article.main.list'
+// 文章草稿
+import articleDraftList from '@/components/main/article/article.draft.list'
 // 文章添加
-import articleAdd from '@/components/main/article/article-add'
+import articleAdd from '@/components/main/article/article.add'
+// 文章修改
+import articleEdit from '@/components/main/article/article.edit'
 // 分类列表
-import classificationList from '@/components/main/classification/classification-list'
+import tagList from '@/components/main/tag/tag-list'
 // 分类添加
-import classificationAdd from '@/components/main/classification/classification-add'
+import tagAdd from '@/components/main/tag/tag-add'
 // 分类修改
-import classificationUpd from '@/components/main/classification/classification-upd'
+import tagUpd from '@/components/main/tag/tag-upd'
 // 用户列表
 import userList from '@/components/main/user/user-list'
 // 评论列表
@@ -38,35 +42,40 @@ const router = new Router({
                 {
                     path: 'articleAdd',
                     alias: '',
-                    name: 'articleAdd',
+                    name: 'article/articleAdd',
                     component: articleAdd
                 },
                 {
                     path: 'articleEdit/:aid',
                     alias: '',
                     name: 'articleEdit',
-                    component: articleAdd
+                    component: articleEdit
                 },
                 {
                     path: 'articleList',
-                    name: 'articleList',
-                    component: articleList
+                    name: 'article/articleMainList',
+                    component: articleMainList
                 },
                 {
-                    path: 'classificationList',
-                    name: 'classificationList',
-                    component: classificationList
+                    path: 'articleDraft',
+                    name: 'article/articleDraftList',
+                    component: articleDraftList
                 },
                 {
-                    path: 'classificationUpd/:tid',
+                    path: 'tagList',
+                    name: 'tag/tagList',
+                    component: tagList
+                },
+                {
+                    path: 'tagUpd/:tid',
                     alias: '',
-                    name: 'classificationUpd',
-                    component: classificationUpd
+                    name: 'tag/tagUpd',
+                    component: tagUpd
                 },
                 {
-                    path: 'classificationAdd',
-                    name: 'classificationAdd',
-                    component: classificationAdd
+                    path: 'tagAdd',
+                    name: 'tag/tagAdd',
+                    component: tagAdd
                 },
                 {
                     path: 'userList',
@@ -75,7 +84,7 @@ const router = new Router({
                 },
                 {
                     path: 'commentList',
-                    name: 'commentList',
+                    name: 'comment/commentList',
                     component: commentList
                 }
             ]
