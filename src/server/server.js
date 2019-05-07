@@ -39,23 +39,23 @@ export const addArticle = articleData => {
 export const editArticle = articleData => {
     return http.post('/article/articleEdit', { articleData });
 }
-// 文章草稿
-export const articleDraft = articleData => {
-    return http.post('/article/articleDraft', { articleData });
-}
 // 获取文章列表
 export const articleList = (page, state) => {
     return http.get(`/article/articleList?page=${page}&state=${state}`);
 }
 // 通过aid请求文章内容
 export const articleContentByAid = aid => {
-    return http.post('/article/articleContentByAid', { aid });
+    return http.get(`/article/articleContentByAid?aid=${aid}`);
 }
 // 搜索文章
 export const getArticleBySearch = (searchValue = '', page = 1, state) => {
     return http.get(`/article/getArticleBySearch?searchValue=${searchValue}&page=${page}&state=${state}`);
 }
-// 删除文章
+// 文章垃圾箱
+export const articleDustbin = aids => {
+    return http.post('/article/articleDustbin', { aids });
+}
+// 彻底删除文章
 export const articleDel = aids => {
     return http.post('/article/articleDel', { aids });
 }
@@ -65,7 +65,7 @@ export const uploadImg = formdata => {
 }
 // 查询分类
 export const tagList = () => {
-    return http.post('/tag/getTagList');
+    return http.get('/tag/getTagList');
 }
 // 删除标签
 export const tagDel = tids => {
@@ -85,7 +85,7 @@ export const updTag = reqData => {
 }
 // 获取单个标签信息
 export const getTagByTid = tid => {
-    return http.post('/tag/getTagByTid', { tid });
+    return http.get(`/tag/getTagByTid?tid=${tid}`);
 }
 // 评论列表
 export const getCommentList = page => {
@@ -108,6 +108,6 @@ export const getReplyCount = cid => {
     return http.get(`/comment/getReplyCount?cid=${cid}`);
 }
 // 回复删除
-export const ReplyDel = rids => {
-    return http.post('/comment/ReplyDel', { rids });
+export const replyDel = rids => {
+    return http.post('/comment/replyDel', { rids });
 }

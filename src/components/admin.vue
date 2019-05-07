@@ -29,10 +29,12 @@ export default {
   height: 100%;
 }
 #header {
+  position: relative;
+  z-index: 50;
   height: @headerH;
   line-height: @headerH;
-  background-color: @bg;
   color: @color;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 #all {
   position: absolute;
@@ -53,8 +55,6 @@ export default {
   right: 0;
   bottom: 0;
   box-sizing: border-box;
-  border: 1px solid darken(@bg, 10%);
-  border-top-left-radius: 5px;
   background-color: #fff;
   overflow: hidden;
   overflow-y: auto;

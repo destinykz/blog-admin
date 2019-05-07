@@ -1,5 +1,5 @@
 <template>
-  <c-list :primaryID="'tid'" :columns="columns" :list="tagList" @delItem="delTag"></c-list>
+  <c-list :primaryID="'tid'" :columns="columns" :list="tagList" @batchDel="batchDelTag"></c-list>
 </template>
 
 <script>
@@ -59,7 +59,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.delTag([params.row.tid]);
+                      this.singleDelTag(params.row.tid);
                     }
                   }
                 },
@@ -75,7 +75,7 @@ export default {
   methods: {
     // 修改标签
     tagDetail(tid) {
-      this.$router.push({ name: "tagUpd", params: { tid } });
+      this.$router.push({ path: `tagUpd/${tid}` });
     },
     // 加载标签表格
     loadTag() {
@@ -83,8 +83,18 @@ export default {
         this.tagList = tagList;
       });
     },
-    // 删除文章
-    delTag(tids) {
+    // 单个删除标签
+    singleDelTag(tid) {
+      this.$Modal.confirm({
+        title: "删除确认",
+        content: "<p>您确认删除当前标签吗？</p>",
+        onOk: () => {
+          this.batchDelTag([tid]);
+        }
+      });
+    },
+    // 批量删除标签
+    batchDelTag(tids) {
       if (!tids || !tids.length) {
         this.$Message.warning("请选择需要删除的标签");
         return;

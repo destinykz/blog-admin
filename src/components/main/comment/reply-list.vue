@@ -8,19 +8,19 @@
       :total="total"
       :pageSize="pageSize"
       @pageChange="pageChange"
-      @delItem="delReply"
+      @batchDel="delReply"
     ></c-list>
   </div>
 </template>
 
 <script>
 import cList from "@/components/c-list";
-import { getReplyList, getReplyCount, ReplyDel } from "@/server/server";
+import { getReplyList, getReplyCount, replyDel } from "@/server/server";
 export default {
-  components:{
+  components: {
     cList
   },
-  props:{
+  props: {
     cid: {
       type: String
     }
@@ -125,19 +125,8 @@ export default {
     },
     // 删除回复
     delReply(rids) {
-      if (!rids || !rids.length) {
-        this.$Message.warning("请选择需要删除的回复");
-        return;
-      }
-      this.$Modal.confirm({
-        title: "删除确认",
-        content: "<p>您确认删除回复吗？</p>",
-        onOk: () => {
-          replyDel(rids).then(data => {
-            console.log(data);
-            // if (data.c === 0) window.location.reload();
-          });
-        }
+      replyDel(rids).then(data => {
+        if (data.c === 0) this.loadReplyList(1);
       });
     },
     // 回复勾选

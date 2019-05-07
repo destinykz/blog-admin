@@ -2,12 +2,14 @@
   <header id="header" class="clear">
     <h1 id="logo">
       <a title="logo" href="#">
-        <img src="@/assets/img/logo.png" alt="logo">
         <span id="logo-text">chandler</span>
       </a>
     </h1>
     <section id="header-cnt">
       <a href="javascript:;" id="login-out" title="注销" @click="loginOut">注 销</a>
+      <a id="github-address" href="https://github.com/chandlerCao/blog-admin" target="_blank">
+        <Icon type="logo-github" :size="25"/>
+      </a>
       <span id="say-hello">欢迎您，{{username}}</span>
     </section>
   </header>
@@ -34,19 +36,18 @@ export default {
   float: left;
   width: @asideW;
   height: 100%;
+  background-color: @content;
   text-align: center;
 }
-#logo img {
-  width: 40px;
-  vertical-align: middle;
-}
 #logo-text {
-  color: @color;
-  font-size: 28px;
+  color: #fff;
+  font-size: 30px;
   vertical-align: middle;
   font-weight: bold;
 }
 #header-cnt {
+  display: flex;
+  justify-content: flex-end;
   float: left;
   position: relative;
   width: calc(100% - @asideW);
@@ -55,8 +56,10 @@ export default {
   box-sizing: border-box;
   padding-right: 10px;
 }
+#github-address {
+  margin-right: 20px;
+}
 #say-hello {
-  float: right;
   margin-right: 80px;
 }
 #login-out {

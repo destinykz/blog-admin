@@ -8,6 +8,8 @@ import admin from '@/components/admin'
 import articleMainList from '@/components/main/article/article.main.list'
 // 文章草稿
 import articleDraftList from '@/components/main/article/article.draft.list'
+// 文章垃圾
+import articleDustbinList from '@/components/main/article/article.dustbin.list'
 // 文章添加
 import articleAdd from '@/components/main/article/article.add'
 // 文章修改
@@ -26,7 +28,6 @@ import commentList from '@/components/main/comment/comment-list'
 Vue.use(Router)
 
 const router = new Router({
-    mode: 'history',
     routes: [
         {
             path: '/login',
@@ -52,14 +53,19 @@ const router = new Router({
                     component: articleEdit
                 },
                 {
-                    path: 'articleList',
+                    path: 'articleMainList',
                     name: 'article/articleMainList',
                     component: articleMainList
                 },
                 {
-                    path: 'articleDraft',
+                    path: 'articleDraftList',
                     name: 'article/articleDraftList',
                     component: articleDraftList
+                },
+                {
+                    path: 'articleDustbinList',
+                    name: 'article/articleDustbinList',
+                    component: articleDustbinList
                 },
                 {
                     path: 'tagList',
@@ -68,7 +74,6 @@ const router = new Router({
                 },
                 {
                     path: 'tagUpd/:tid',
-                    alias: '',
                     name: 'tag/tagUpd',
                     component: tagUpd
                 },

@@ -1,6 +1,6 @@
 <template>
 <div id="comment-list">
-    <c-list :primaryID="'cid'" :columns="columns" :list="commentList" :total="total" :pageSize="pageSize" @pageChange="pageChange" @delItem="delComment">
+    <c-list :primaryID="'cid'" :columns="columns" :list="commentList" :total="total" :pageSize="pageSize" @pageChange="pageChange" @batchDel="delComment">
     </c-list>
     <Modal v-model="replyModal" footer-hide :styles="{position: 'absolute', width: '80%', height: '80%', left: '10%', top: '10%'}" title="回复列表" @on-cancel="cancel">
         <reply-list :cid="nowCid"></reply-list>

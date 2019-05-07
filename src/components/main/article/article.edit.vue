@@ -1,81 +1,15 @@
 <template>
-  <div id="article-add">
-    <div class="cdl-form-item">
-      <div class="cdl-form-wrap">
-        <span class="cdl-form-title">文章标题</span>
-        <div class="cdl-form-cnt">
-          <Input v-model="articleData.title" placeholder="请输入文章标题"/>
-        </div>
-      </div>
-    </div>
-    <div class="cdl-form-item">
-      <div class="cdl-form-wrap">
-        <span class="cdl-form-title">文章前言</span>
-        <div class="cdl-form-cnt">
-          <Input v-model="articleData.preface" type="textarea" :rows="4" placeholder="请输入文章前言"/>
-        </div>
-      </div>
-    </div>
-    <div class="cdl-form-item">
-      <div class="cdl-form-wrap">
-        <span class="cdl-form-title">文章图片</span>
-        <div class="cdl-form-cnt">
-          <label for="uploadImg" class="cdl-button blue">
-            <i class="fa fa-upload"></i>&nbsp;&nbsp;上传文章封面
-          </label>
-          <input
-            type="file"
-            accept="image/gif, image/jpeg, image/jpg, image/png, image/svg"
-            id="uploadImg"
-            @change="uploadImg"
-            :value="fileVal"
-          >
-        </div>
-      </div>
-      <div id="cover" v-show="articleData.cover">
-        <i class="uploadImgClose cdl-close fa fa-close" title="移除这张图片" @click="closeUploadImg"></i>
-        <img :src="articleData.cover" alt="主图">
-      </div>
-    </div>
-    <div class="cdl-form-item">
-      <div class="cdl-form-wrap">
-        <span class="cdl-form-title">文章标签</span>
-        <div class="cdl-form-cnt">
-          <Select v-model="articleData.tag_id">
-            <Option v-for="item in tagList" :value="item.tid" :key="item.tid">{{ item.tag_name }}</Option>
-          </Select>
-        </div>
-      </div>
-    </div>
-    <div class="cdl-form-item">
-      <mavon-editor
-        ref="md"
-        :value="articleData.markdownText"
-        @imgAdd="imgAdd"
-        :ishljs="true"
-        @change="articleSave"
-      ></mavon-editor>
-    </div>
-    <div class="cdl-form-item">
-      <div class="cdl-form-wrap">
-        <Button type="primary" :size="'large'" @click="update" style="margin-right: 20px;">修改</Button>
-        <Button v-if="articleData.state === 0" type="warning" :size="'large'" @click="draft">存为草稿箱</Button>
-      </div>
-    </div>
-  </div>
+  <article-base-add :articleData="articleData" :type="'edit'"></article-base-add>
 </template>
 <script>
-import {
-  editArticle,
-  tagList as tagListReq,
-  uploadImg,
-  articleContentByAid
-} from "@/server/server";
+import articleBaseAdd from "./article.base.add";
+import { articleContentByAid } from "@/server/server";
 export default {
+  components: {
+    articleBaseAdd
+  },
   data() {
     return {
-      fileVal: "", // input[type="file"] 的值
-      tagList: [], // 文章标签值
       articleData: {
         aid: "",
         title: "", // 标题
@@ -84,95 +18,17 @@ export default {
         tag_id: "", // 标签
         markdownText: "", // 编辑内容
         markdownHtml: "", // 显示内容
-        state: 0, // 文章状态
+        state: 0 // 文章状态
       }
     };
   },
   created() {
     const aid = this.$route.params.aid;
-    // 获取标签列表
-    tagListReq().then(({ d: tagList }) => {
-      this.tagList = tagList;
-    });
-    // 如果为更改状态，获取aid
-    this.articleData.aid = aid;
-    // 通过aid请求文章内容
     articleContentByAid(aid).then(({ d: articleInfo }) => {
       for (const key in articleInfo) {
         this.articleData[key] = articleInfo[key];
       }
     });
-  },
-  watch: {
-    $route(to, from) {
-      for (const key in this.articleData) {
-        this.articleData[key] = "";
-      }
-    }
-  },
-  methods: {
-    // 上传封面图
-    uploadImg(e) {
-      const loading = new c.Loading("正在上传，请稍后~");
-      const file = e.target.files[0];
-
-      const formdata = new FormData();
-      formdata.append("image", file);
-
-      uploadImg(formdata)
-        .then(({ d: data }) => {
-          this.articleData.cover = data.src;
-        })
-        .finally(() => {
-          loading.close();
-        });
-    },
-    // 关闭封面图
-    closeUploadImg() {
-      this.articleData.cover = "";
-      // 清空input file的值
-      this.fileVal = "";
-    },
-    // 文章内容保存
-    articleSave(markdownText, markdownHtml) {
-      this.articleData.markdownText = markdownText;
-      this.articleData.markdownHtml = markdownHtml;
-    },
-    // markdown 上传图片
-    imgAdd(pos, file) {
-      const $mavon = this.$refs.md;
-      const loading = new c.Loading("正在上传，请稍后~");
-      // 创建表单
-      const formdata = new FormData();
-      formdata.append("image", file);
-      uploadImg(formdata)
-        .then(data => {
-          $mavon.$img2Url(pos, data.src);
-        })
-        .finally(() => {
-          loading.close();
-        });
-    },
-    // 文章修改
-    update() {
-      // 发布loading图
-      const loading = new c.Loading(`正在修改，请耐心等待！`);
-      editArticle(this.articleData)
-        .then(data => {
-          if (data.c === 0) this.$router.push({ path: "articleDraft" });
-        })
-        .finally(() => {
-          loading.close();
-        });
-    },
-    draft() {
-
-    }
   }
 };
 </script>
-<style lang="less">
-.markdown-body img {
-  width: 300px !important;
-}
-</style>
