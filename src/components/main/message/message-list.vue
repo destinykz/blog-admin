@@ -1,13 +1,13 @@
 <template>
-  <div id="comment-list">
+  <div id="message-list">
     <c-list
-      :primaryID="'cid'"
+      primaryID="mid"
       :columns="columns"
-      :list="commentList"
+      :list="messageList"
       :total="total"
       :pageSize="pageSize"
       @pageChange="pageChange"
-      @batchDel="batchDelComment"
+      @batchDel="batchDelMessage"
     ></c-list>
     <Modal
       v-model="replyModal"
@@ -16,7 +16,7 @@
       title="回复列表"
       @on-cancel="cancel"
     >
-      <reply-list :cid="nowCid"></reply-list>
+      <reply-list :mid="nowMid"></reply-list>
     </Modal>
   </div>
 </template>
@@ -24,15 +24,15 @@
 <script>
 import cList from "@/components/c-list";
 import replyList from "./reply-list";
-import { getCommentList, getCommentCount, commentDel } from "@/server/server";
+import { getMessageList, getMessageCount, messageDel } from "@/server/server";
 export default {
   components: {
     cList,
     replyList
   },
   created() {
-    this.loadCommentList(1);
-    this.loadCommentCount();
+    this.loadMessageList(1);
+    this.loadMessageCount();
   },
   data() {
     return {
@@ -52,7 +52,7 @@ export default {
           key: "content"
         },
         {
-          title: "评论人",
+          title: "留言人",
           key: "user"
         },
         {
@@ -73,7 +73,7 @@ export default {
         },
         {
           title: "操作",
-          width: 250,
+          width: 180,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -89,25 +89,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.articleDetail(params.row.aid);
-                    }
-                  }
-                },
-                "对应文章"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.replyShow(params.row.cid);
+                      this.replyShow(params.row.mid);
                     }
                   }
                 },
@@ -122,7 +104,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.singleDelComment(params.row.cid);
+                      this.singleDelMessage(params.row.mid);
                     }
                   }
                 },
@@ -132,60 +114,51 @@ export default {
           }
         }
       ],
-      commentList: [],
+      messageList: [],
       total: 0,
       pageSize: 0,
-      nowCid: "",
+      nowMid: "",
       replyModal: false
     };
   },
   methods: {
-    // 评论分页
+    // 留言分页
     pageChange(page) {
-      this.loadCommentList(page);
+      this.loadMessageList(page);
     },
-    // 加载评论
-    loadCommentList(page) {
-      getCommentList(page).then(({ d }) => {
-        this.commentList = d.commentList;
+    // 加载留言
+    loadMessageList(page) {
+      getMessageList(page).then(({ d }) => {
+        this.messageList = d.messageList;
         this.pageSize = d.pageSize;
       });
     },
-    loadCommentCount() {
-      getCommentCount().then(({ d }) => {
+    loadMessageCount() {
+      getMessageCount().then(({ d }) => {
         this.total = d.total;
       });
     },
-    // 查看评论对应文章
-    articleDetail(aid) {
-      this.$router.push({
-        name: "articleEdit",
-        params: {
-          aid
-        }
-      });
-    },
-    // 查看评论对应回复
-    replyShow(cid) {
-      this.nowCid = cid;
+    // 查看留言对应回复
+    replyShow(mid) {
+      this.nowMid = mid;
       this.replyModal = true;
     },
-    // 单个删除评论
-    singleDelComment(cid) {
+    // 单个删除留言
+    singleDelMessage(mid) {
       this.$Modal.confirm({
         title: "删除确认",
-        content: "<p>您确认当前评论吗？</p>",
+        content: "<p>您确认当前留言吗？</p>",
         onOk: () => {
-          this.batchDelComment([cid]);
+          this.batchDelMessage([mid]);
         }
       });
     },
-    // 批量删除评论
-    batchDelComment(cids) {
-      commentDel(cids).then(data => {
+    // 删除留言
+    batchDelMessage(mids) {
+      messageDel(mids).then(data => {
         if (data.c === 0) {
-          this.loadCommentList(1);
-          this.loadCommentCount();
+          this.loadMessageList(1);
+          this.loadMessageCount();
         }
       });
     },

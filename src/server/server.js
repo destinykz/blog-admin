@@ -1,3 +1,4 @@
+
 import axios from 'axios'
 import router from "@/router/router";
 const http = axios.create({
@@ -55,6 +56,10 @@ export const getArticleBySearch = (searchValue = '', page = 1, state) => {
 export const articleDustbin = aids => {
     return http.post('/article/articleDustbin', { aids });
 }
+// 恢复至草稿箱
+export const articleRecovery = aids => {
+    return http.post('/article/articleRecovery', { aids });
+}
 // 彻底删除文章
 export const articleDel = aids => {
     return http.post('/article/articleDel', { aids });
@@ -110,4 +115,28 @@ export const getReplyCount = cid => {
 // 回复删除
 export const replyDel = rids => {
     return http.post('/comment/replyDel', { rids });
+}
+// 留言列表
+export const getMessageList = page => {
+    return http.get(`/message/getMessageList?page=${page}`);
+}
+// 留言总数
+export const getMessageCount = () => {
+    return http.get('/message/getMessageCount');
+}
+// 留言删除
+export const messageDel = mids => {
+    return http.post('/message/messageDel', { mids });
+}
+// 回复列表
+export const getMReplyList = (mid, page) => {
+    return http.get(`/message/getMReplyList?mid=${mid}&page=${page}`);
+}
+// 回复总数
+export const getMReplyCount = mid => {
+    return http.get(`/message/getMReplyCount?mid=${mid}`);
+}
+// 回复删除
+export const MReplyDel = rids => {
+    return http.post('/message/MReplyDel', { rids });
 }

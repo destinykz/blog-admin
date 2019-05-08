@@ -24,6 +24,8 @@ import tagUpd from '@/components/main/tag/tag-upd'
 import userList from '@/components/main/user/user-list'
 // 评论列表
 import commentList from '@/components/main/comment/comment-list'
+// 留言列表
+import messageList from '@/components/main/message/message-list'
 
 Vue.use(Router)
 
@@ -91,6 +93,11 @@ const router = new Router({
                     path: 'commentList',
                     name: 'comment/commentList',
                     component: commentList
+                },
+                {
+                    path: 'messageList',
+                    name: 'comment/messageList',
+                    component: messageList
                 }
             ]
         }

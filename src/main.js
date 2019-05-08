@@ -16,7 +16,7 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 Vue.use(mavonEditor)
 
-import { Menu, Submenu, MenuGroup, MenuItem, Button, Input, Select, Option, Table, Modal, Icon, Message, Page } from 'iview'
+import { Menu, Submenu, MenuGroup, MenuItem, Button, Input, Select, Option, Table, Modal, Icon, Message, Page, Breadcrumb, BreadcrumbItem } from 'iview'
 Vue.component('Menu', Menu);
 Vue.component('Submenu', Submenu);
 Vue.component('MenuGroup', MenuGroup);
@@ -29,6 +29,8 @@ Vue.component('Table', Table);
 Vue.component('Modal', Modal);
 Vue.component('Icon', Icon);
 Vue.component('Page', Page);
+Vue.component('Breadcrumb', Breadcrumb);
+Vue.component('BreadcrumbItem', BreadcrumbItem);
 Vue.prototype.$Message = Message;
 c.$Message = Message;
 Vue.prototype.$Modal = Modal;

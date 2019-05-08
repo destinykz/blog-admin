@@ -8,20 +8,20 @@
       :total="total"
       :pageSize="pageSize"
       @pageChange="pageChange"
-      @batchDel="delReply"
+      @batchDel="delMReply"
     ></c-list>
   </div>
 </template>
 
 <script>
 import cList from "@/components/c-list";
-import { getReplyList, getReplyCount, replyDel } from "@/server/server";
+import { getMReplyList, getMReplyCount, MReplyDel } from "@/server/server";
 export default {
   components: {
     cList
   },
   props: {
-    cid: {
+    mid: {
       type: String
     }
   },
@@ -83,7 +83,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.delReply([params.row.rid]);
+                      this.delMReply([params.row.rid]);
                     }
                   }
                 },
@@ -99,32 +99,32 @@ export default {
     };
   },
   watch: {
-    cid(newCid) {
-      this.loadReplyList(newCid, 1);
-      this.loadReplyCount(newCid);
+    mid(newMid) {
+      this.loadMReplyList(newMid, 1);
+      this.loadMReplyCount(newMid);
     }
   },
   methods: {
     // 回复分页
     pageChange(page) {
-      this.loadReplyList(this.cid, page);
+      this.loadMReplyList(this.mid, page);
     },
     // 加载回复
-    loadReplyList(page) {
-      getReplyList(this.cid, page).then(({ d }) => {
+    loadMReplyList(page) {
+      getMReplyList(this.mid, page).then(({ d }) => {
         this.replyList = d.replyList;
         this.pageSize = d.pageSize;
       });
     },
-    loadReplyCount() {
-      getReplyCount(this.cid).then(({ d }) => {
+    loadMReplyCount() {
+      getMReplyCount(this.mid).then(({ d }) => {
         this.total = d.total;
       });
     },
     // 删除回复
-    delReply(rids) {
-      replyDel(rids).then(data => {
-        if (data.c === 0) this.loadReplyList(1);
+    delMReply(rids) {
+      MReplyDel(rids).then(data => {
+        if (data.c === 0) this.loadMReplyList(1);
       });
     }
   }

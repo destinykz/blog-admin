@@ -21,7 +21,7 @@
         <span class="cdl-form-title">文章图片</span>
         <div class="cdl-form-cnt">
           <label for="uploadImg" class="cdl-button blue">
-            <Icon type="md-cloud-upload" :size="18"/>上传文章封面
+            <Icon type="md-cloud-upload" :size="18"/> 上传文章封面
           </label>
           <input
             type="file"

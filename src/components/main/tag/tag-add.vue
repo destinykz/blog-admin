@@ -13,7 +13,7 @@
         <span class="cdl-form-title">标签图片</span>
         <div class="cdl-form-cnt">
           <label for="uploadImg" class="cdl-button blue">
-            <i class="fa fa-upload"></i>&nbsp;&nbsp;上传标签图片
+            <Icon type="md-cloud-upload" :size="18"/>上传标签图片
           </label>
           <input
             type="file"

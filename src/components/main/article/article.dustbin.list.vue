@@ -11,7 +11,7 @@
 
 <script>
 import articleList from "./article.base.list";
-import { articleDel } from "@/server/server";
+import { articleDel, articleRecovery } from "@/server/server";
 export default {
   components: {
     articleList
@@ -36,7 +36,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    returnShis.singleReturnArticle(params.row.aid);
+                    this.singleRecoveryArticle(params.row.aid);
                   }
                 }
               },
@@ -65,7 +65,7 @@ export default {
           id: 1,
           type: "success",
           fn: aids => {
-            this.batchReturnArticle(aids);
+            this.batchRecoveryArticle(aids);
           },
           icon: "md-return-left",
           text: "批量恢复至草稿箱"
@@ -91,12 +91,14 @@ export default {
       });
     },
     // 单个恢复至草稿箱
-    singleReturnArticle(aid) {
-      console.log(aid);
+    singleRecoveryArticle(aid) {
+      this.batchRecoveryArticle([aid]);
     },
     // 批量恢复至草稿箱
-    batchReturnArticle(aids) {
-      console.log(aids);
+    batchRecoveryArticle(aids) {
+      articleRecovery(aids).then(data => {
+        if (data.c === 0) this.$refs.articleBaseList.loadArticleList(1);
+      });
     }
   }
 };

@@ -34,7 +34,10 @@
       </MenuItem>
     </Submenu>
     <MenuItem name="commentList" to="/admin/commentList">
-      <Icon type="ios-people"/>评论列表
+      <Icon type="ios-list-box" />评论列表
+    </MenuItem>
+    <MenuItem name="messageList" to="/admin/messageList">
+      <Icon type="md-list-box" />留言列表
     </MenuItem>
   </Menu>
 </template>
