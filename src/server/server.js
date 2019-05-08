@@ -2,7 +2,7 @@
 import axios from 'axios'
 import router from "@/router/router";
 const http = axios.create({
-    baseURL: 'http://localhost:7070/admin',
+    baseURL: '/admin',
     responseType: 'json'
 });
 // 请求拦截器
