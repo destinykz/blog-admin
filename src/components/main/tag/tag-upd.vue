@@ -13,7 +13,7 @@
         <span class="cdl-form-title">标签图片</span>
         <div class="cdl-form-cnt">
           <label for="uploadImg" class="cdl-button blue">
-            <Icon type="md-cloud-upload" :size="18"/> 上传标签图片
+            <Icon type="md-cloud-upload" :size="18"/>上传标签图片
           </label>
           <input
             type="file"
@@ -80,7 +80,7 @@ export default {
         newTagImgSrc: this.newTagImgSrc,
         oldTagImgSrc: this.oldTagImgSrc
       }).then(data => {
-        if (data.c === 0) this.$router.push({ name: "classificationList" });
+        if (data.c === 0) this.$router.push({ path: "/admin/tagList" });
       });
     }
   },
